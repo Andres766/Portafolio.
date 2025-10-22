@@ -233,7 +233,7 @@ export default function Portfolio() {
             
             <div className={`backdrop-blur-sm rounded-xl p-8 ${isDark ? 'bg-slate-800/30' : 'bg-white shadow-lg'}`}>
               <h3 className={`text-2xl font-bold mb-6 text-center ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Desarrollador Backend</h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4"> 
                 {['Nodejs', 'Python', 'SQL/NoSQL', 'Firebase', 'Terminal', 'AWS'].map((skill) => (
                   <div key={skill} className={`p-4 rounded-lg flex items-center gap-3 ${isDark ? 'bg-slate-800/50' : 'bg-gray-50'}`}>
                     <div className={`w-8 h-8 rounded flex items-center justify-center text-white text-xs font-bold ${isDark ? 'bg-sky-500' : 'bg-blue-600'}`}>
@@ -325,7 +325,7 @@ export default function Portfolio() {
                   </div>
                 </div>
                 <p className={`${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  "Excelente profesional, entrega trabajos de calidad y siempre cumple con los plazos establecidos. Muy recomendado."
+                  Excelente profesional, entrega trabajos de calidad y siempre cumple con los plazos establecidos. Muy recomendado.
                 </p>
               </div>
             ))}
