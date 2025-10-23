@@ -441,7 +441,7 @@ export default function Portfolio() {
                   </div>
                 </div>
                 <p className={`${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  "Excelente profesional, entrega trabajos de calidad y siempre cumple con los plazos establecidos. Muy recomendado."
+                  &quot;Excelente profesional, entrega trabajos de calidad y siempre cumple con los plazos establecidos. Muy recomendado.&quot;
                 </p>
               </div>
             ))}
