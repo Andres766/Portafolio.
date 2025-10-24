@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { FaLinkedin, FaGithub, FaLightbulb, FaTools, FaComments, FaClipboardList, FaUserFriends, FaBrain, FaWhatsapp, FaTimes, FaHtml5, FaCss3Alt, FaJs, FaReact, FaBootstrap, FaGitAlt, FaNodeJs, FaPython, FaDatabase, FaFire, FaTerminal, FaAws } from 'react-icons/fa'
 import { SiTypescript } from 'react-icons/si'
@@ -12,6 +12,7 @@ export default function Portfolio() {
   const [loading, setLoading] = useState(true)
   const [activeSection, setActiveSection] = useState('home')
   const [hoveredNav, setHoveredNav] = useState<string | null>(null)
+  const iconsRef = useRef<HTMLDivElement>(null)
 
   // Loading animation
   useEffect(() => {
@@ -41,6 +42,32 @@ export default function Portfolio() {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Parallax de íconos con scroll (suavizado)
+  useEffect(() => {
+    let rafId = 0
+    let current = 0
+    let target = 0
+
+    const update = () => {
+      current += (target - current) * 0.12
+      if (iconsRef.current) {
+        iconsRef.current.style.setProperty('--scrollY', `${current}px`)
+      }
+      rafId = requestAnimationFrame(update)
+    }
+
+    const onScroll = () => {
+      target = window.scrollY
+    }
+
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true } as any)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(rafId)
+    }
   }, [])
 
   // Datos de servicios
@@ -145,55 +172,85 @@ export default function Portfolio() {
         
         <p className="mt-4 text-slate-400 animate-pulse">Cargando portafolio...</p>
 
-        <style jsx>{`
-          @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-          @keyframes fade-in {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-          }
-          @keyframes loading-bar {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(400%); }
-          }
-          .animate-spin-slow { animation: spin-slow 3s linear infinite; }
-          .animate-fade-in { animation: fade-in 1s ease-out forwards; }
-          .animate-loading-bar { animation: loading-bar 1.5s ease-in-out infinite; }
-        `}</style>
-      </div>
-    )
-  }
+    </div>
+  )
+}
 
   return (
     <div className={`min-h-screen transition-colors duration-300 relative ${isDark ? 'text-white' : 'text-gray-900'}`}>
       {/* Animated Background */}
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        {isDark ? (
-          <>
-            {/* Dark Mode Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
-            
-            {/* Animated Gradient Orbs */}
-            <div className="absolute top-0 -left-4 w-72 h-72 bg-sky-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
-            <div className="absolute top-0 -right-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
-            <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000"></div>
-            
-            {/* Grid Pattern */}
-            <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
-          </>
-        ) : (
-          <>
-            {/* Light Mode Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50"></div>
-            
-            {/* Animated Gradient Orbs */}
-            <div className="absolute top-0 -left-4 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-            <div className="absolute top-0 -right-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-            <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-          </>
-        )}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className={`animated-bg ${isDark ? 'animated-bg-dark' : 'animated-bg-light'}`}></div>
+        <div className={`floating-icons ${isDark ? 'floating-dark' : 'floating-light'}`} ref={iconsRef}>
+          {/* Íconos adicionales en la parte superior para mantener densidad mientras se scrollea */}
+          <div className="floating-wrap speed-003" style={{ top: '2%', left: '8%' }}>
+            <div className="floating-icon dur-20" style={{ animationDelay: '0.3s' }}><FaReact size={20} /></div>
+          </div>
+          <div className="floating-wrap speed-004" style={{ top: '4%', left: '28%' }}>
+            <div className="floating-icon dur-18" style={{ animationDelay: '0.8s' }}><FaNodeJs size={20} /></div>
+          </div>
+          <div className="floating-wrap speed-003" style={{ top: '7%', left: '52%' }}>
+            <div className="floating-icon dur-19" style={{ animationDelay: '0.5s' }}><FaJs size={18} /></div>
+          </div>
+          <div className="floating-wrap speed-004" style={{ top: '9%', left: '76%' }}>
+            <div className="floating-icon dur-20" style={{ animationDelay: '1.1s' }}><SiTypescript size={18} /></div>
+          </div>
+          <div className="floating-wrap speed-003" style={{ top: '12%', left: '16%' }}>
+            <div className="floating-icon dur-17" style={{ animationDelay: '0.4s' }}><FaAws size={18} /></div>
+          </div>
+          <div className="floating-wrap speed-004" style={{ top: '14%', left: '88%' }}>
+            <div className="floating-icon dur-16" style={{ animationDelay: '0.9s' }}><FaPython size={18} /></div>
+          </div>
+          <div className="floating-wrap speed-003" style={{ top: '17%', left: '34%' }}>
+            <div className="floating-icon dur-20" style={{ animationDelay: '0.2s' }}><FaHtml5 size={18} /></div>
+          </div>
+          <div className="floating-wrap speed-004" style={{ top: '19%', left: '67%' }}>
+            <div className="floating-icon dur-18" style={{ animationDelay: '0.7s' }}><FaCss3Alt size={18} /></div>
+          </div>
+          <div className="floating-wrap speed-003" style={{ top: '22%', left: '90%' }}>
+            <div className="floating-icon dur-17" style={{ animationDelay: '1.3s' }}><FaGitAlt size={18} /></div>
+          </div>
+          <div className="floating-wrap speed-006" style={{ top: '15%', left: '12%' }}>
+            <div className="floating-icon dur-16" style={{ animationDelay: '0s' }}><FaReact size={28} /></div>
+          </div>
+          <div className="floating-wrap speed-004" style={{ top: '72%', left: '20%' }}>
+            <div className="floating-icon dur-14" style={{ animationDelay: '1.2s' }}><FaNodeJs size={28} /></div>
+          </div>
+          <div className="floating-wrap speed-008" style={{ top: '32%', left: '82%' }}>
+            <div className="floating-icon dur-18" style={{ animationDelay: '0.6s' }}><FaJs size={26} /></div>
+          </div>
+          <div className="floating-wrap speed-005" style={{ top: '50%', left: '50%' }}>
+            <div className="floating-icon dur-20" style={{ animationDelay: '1.8s' }}><SiTypescript size={26} /></div>
+          </div>
+          <div className="floating-wrap speed-007" style={{ top: '22%', left: '60%' }}>
+            <div className="floating-icon dur-15" style={{ animationDelay: '0.9s' }}><FaAws size={24} /></div>
+          </div>
+          <div className="floating-wrap speed-003" style={{ top: '84%', left: '76%' }}>
+            <div className="floating-icon dur-17" style={{ animationDelay: '2.4s' }}><FaPython size={26} /></div>
+          </div>
+          <div className="floating-wrap speed-005" style={{ top: '8%', left: '40%' }}>
+            <div className="floating-icon dur-15" style={{ animationDelay: '0.3s' }}><FaHtml5 size={26} /></div>
+          </div>
+          <div className="floating-wrap speed-006" style={{ top: '28%', left: '10%' }}>
+            <div className="floating-icon dur-16" style={{ animationDelay: '1.0s' }}><FaCss3Alt size={26} /></div>
+          </div>
+          <div className="floating-wrap speed-004" style={{ top: '65%', left: '85%' }}>
+            <div className="floating-icon dur-14" style={{ animationDelay: '1.6s' }}><FaGitAlt size={24} /></div>
+          </div>
+          <div className="floating-wrap speed-007" style={{ top: '40%', left: '30%' }}>
+            <div className="floating-icon dur-18" style={{ animationDelay: '0.8s' }}><FaDatabase size={24} /></div>
+          </div>
+          <div className="floating-wrap speed-003" style={{ top: '75%', left: '60%' }}>
+            <div className="floating-icon dur-17" style={{ animationDelay: '2.2s' }}><FaFire size={24} /></div>
+          </div>
+          <div className="floating-wrap speed-008" style={{ top: '18%', left: '75%' }}>
+            <div className="floating-icon dur-20" style={{ animationDelay: '0.5s' }}><FaTerminal size={24} /></div>
+          </div>
+          <div className="floating-wrap speed-004" style={{ top: '54%', left: '12%' }}>
+            <div className="floating-icon dur-15" style={{ animationDelay: '1.4s' }}><FaBootstrap size={24} /></div>
+          </div>
+        <div className={`absolute inset-0 bg-grid-pattern ${isDark ? 'opacity-5' : 'opacity-10 animate-grid-light'}`}></div>
+        </div>
       </div>
 
       {/* Sidebar Navigation */}
@@ -288,47 +345,6 @@ export default function Portfolio() {
       {/* About Section */}
       <section id="about" className="min-h-screen flex items-center px-4 py-20">
         <div className="max-w-6xl mx-auto w-full">
-          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Sobre mí</p>
-          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Quién soy</h2>
-          
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className={`backdrop-blur-sm rounded-xl p-8 ${isDark ? 'bg-slate-800/30' : 'bg-white shadow-lg'}`}>
-              <p className={`mb-4 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                Soy un desarrollador web fullstack apasionado por crear experiencias digitales excepcionales. Con experiencia en tecnologías frontend y backend, me especializo en construir aplicaciones web modernas y responsivas.
-              </p>
-              <p className={`mb-4 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                Mi enfoque se centra en escribir código limpio, mantenible y escalable, siempre buscando las mejores prácticas y nuevas tecnologías para mejorar mis habilidades.
-              </p>
-              <p className={isDark ? 'text-slate-300' : 'text-gray-700'}>
-                Cuando no estoy programando, disfruto de la música, los videojuegos y explorar nuevas tecnologías emergentes.
-              </p>
-            </div>
-            
-            <div className="space-y-6">
-              <div className={`backdrop-blur-sm rounded-xl p-6 ${isDark ? 'bg-slate-800/30' : 'bg-white shadow-lg'}`}>
-                <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Educación</h3>
-                <p className={isDark ? 'text-slate-300' : 'text-gray-700'}>Ingeniero de Software</p>
-                <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Universidad Cooperativa de colombia, 2023-2027</p>
-              </div>
-              
-              <div className={`backdrop-blur-sm rounded-xl p-6 ${isDark ? 'bg-slate-800/30' : 'bg-white shadow-lg'}`}>
-                <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Idiomas</h3>
-                <p className={isDark ? 'text-slate-300' : 'text-gray-700'}>Español (Nativo)</p>
-                <p className={isDark ? 'text-slate-300' : 'text-gray-700'}>Inglés (Avanzado)</p>
-              </div>
-              
-              <div className={`backdrop-blur-sm rounded-xl p-6 ${isDark ? 'bg-slate-800/30' : 'bg-white shadow-lg'}`}>
-                <h3 className={`text-xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Intereses</h3>
-                <p className={isDark ? 'text-slate-300' : 'text-gray-700'}>Desarrollo Web, IA, Nuevas Tecnologías</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Experience Section */}
-      <section id="experience" className="min-h-screen flex items-center px-4 py-20">
-        <div className="max-w-6xl mx-auto w-full">
           <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Mis habilidades</p>
           <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Mi Experiencia</h2>
           
@@ -359,6 +375,71 @@ export default function Portfolio() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Experience Section */}
+      <section id="experience" className="min-h-screen flex items-center px-4 py-20">
+        <div className="max-w-6xl mx-auto w-full">
+          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Mi trayectoria</p>
+          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Experiencia</h2>
+          
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="order-2 md:order-1">
+              <div className={`w-full aspect-[4/5] rounded-lg overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-gray-200'}`}>
+                <Image 
+                  src="/Andres.jpg" 
+                  alt="Andres Cordoba" 
+                  width={400} 
+                  height={500} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            
+            <div className="order-1 md:order-2 space-y-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
+                  <FaLightbulb className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Pensamiento crítico</p>
+                </div>
+                <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
+                  <FaTools className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Resolución de problemas</p>
+                </div>
+                <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
+                  <FaComments className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Comunicación</p>
+                </div>
+                <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
+                  <FaClipboardList className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Detalle orientado</p>
+                </div>
+                <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
+                  <FaUserFriends className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Jugador del equipo</p>
+                </div>
+                <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
+                  <FaBrain className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Autoconciencia</p>
+                </div>
+              </div>
+              
+              <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                Soy estudiante de Ingeniería con más de dos años de experiencia en el desarrollo de proyectos académicos y 
+                profesionales, donde he fortalecido mis habilidades en el análisis, diseño y construcción de soluciones 
+                tecnológicas. Mi enfoque combina la capacidad de aprendizaje constante con la aplicación práctica de 
+                metodologías y herramientas de ingeniería, lo que me ha permitido aportar valor en diferentes contextos.
+              </p>
+              
+              <button 
+                onClick={() => scrollToSection('contact')}
+                className={`px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+              >
+                Contáctame
+              </button>
             </div>
           </div>
         </div>
@@ -441,7 +522,7 @@ export default function Portfolio() {
                   </div>
                 </div>
                 <p className={`${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  &quot;Excelente profesional, entrega trabajos de calidad y siempre cumple con los plazos establecidos. Muy recomendado.&quot;
+                  "Excelente profesional, entrega trabajos de calidad y siempre cumple con los plazos establecidos. Muy recomendado."
                 </p>
               </div>
             ))}
@@ -464,7 +545,7 @@ export default function Portfolio() {
               </div>
               
               <a 
-                href="https://wa.me/573174570399?text=Hola%20Andres,%20me%20interesa%20trabajar%20contigo" 
+                href="https://wa.me/573123456789?text=Hola%20Andres,%20me%20interesa%20trabajar%20contigo" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className={`flex items-center gap-3 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}
@@ -473,6 +554,30 @@ export default function Portfolio() {
                 <div>
                   <p className={`mb-1 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>WhatsApp</p>
                   <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Envíame un mensaje</p>
+                </div>
+              </a>
+              <a 
+                href="https://github.com/Andres766" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`flex items-center gap-3 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}
+              >
+                <FaGithub className={`${isDark ? 'text-white' : 'text-gray-800'}`} size={32} />
+                <div>
+                  <p className={`mb-1 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>GitHub</p>
+                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Visita mi perfil</p>
+                </div>
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/andres-cordoba-209883183" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`flex items-center gap-3 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}
+              >
+                <FaLinkedin className="text-blue-600" size={32} />
+                <div>
+                  <p className={`mb-1 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>LinkedIn</p>
+                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Conecta conmigo</p>
                 </div>
               </a>
             </div>
@@ -603,33 +708,7 @@ export default function Portfolio() {
         </div>
       )}
 
-      <style jsx>{`
-        @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes scale-in {
-          from { opacity: 0; transform: scale(0.95); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes blob {
-          0% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-          100% { transform: translate(0px, 0px) scale(1); }
-        }
-        .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
-        .animate-scale-in { animation: scale-in 0.3s ease-out forwards; }
-        .animate-blob { animation: blob 7s infinite; }
-        .animation-delay-2000 { animation-delay: 2s; }
-        .animation-delay-4000 { animation-delay: 4s; }
-        .bg-grid-pattern {
-          background-image: 
-            linear-gradient(to right, rgba(100, 116, 139, 0.1) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(100, 116, 139, 0.1) 1px, transparent 1px);
-          background-size: 50px 50px;
-        }
-      `}</style>
+
     </div>
   )
 }
