@@ -12,7 +12,10 @@ export default function Portfolio() {
   const [loading, setLoading] = useState(true)
   const [activeSection, setActiveSection] = useState('home')
   const [hoveredNav, setHoveredNav] = useState<string | null>(null)
-  const iconsRef = useRef<HTMLDivElement>(null)
+   const iconsRef = useRef<HTMLDivElement>(null)
+   const [form, setForm] = useState({ name: '', message: '' })
+   const [sending, setSending] = useState(false)
+   const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' })
 
   // Loading animation
   useEffect(() => {
@@ -584,23 +587,56 @@ export default function Portfolio() {
             
             <div className="space-y-6">
               <h3 className="text-2xl font-bold">Escríbeme lo que necesitas</h3>
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-4" onSubmit={async (e) => {
+                e.preventDefault()
+                if (!form.name.trim() || !form.message.trim()) {
+                  setFeedback({ type: 'error', message: 'Por favor completa tu nombre y el mensaje.' })
+                  return
+                }
+                try {
+                  setSending(true)
+                  setFeedback({ type: null, message: '' })
+                  const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: form.name, message: form.message })
+                  })
+                  const data = await res.json()
+                  if (!res.ok) throw new Error(data?.error || 'Error al enviar')
+                  setFeedback({ type: 'success', message: '¡Mensaje enviado! Te responderé pronto.' })
+                  setForm({ name: '', message: '' })
+                } catch (err) {
+                  setFeedback({ type: 'error', message: 'No se pudo enviar el mensaje. Intenta nuevamente más tarde.' })
+                } finally {
+                  setSending(false)
+                }
+              }}>
                 <input
                   type="text"
                   placeholder="Tu nombre:"
+                  value={form.name}
+                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                   className={`w-full backdrop-blur-sm border rounded-lg px-4 py-3 focus:outline-none transition-colors ${isDark ? 'bg-slate-800/30 border-slate-700 text-white placeholder-slate-500 focus:border-sky-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-600'}`}
                 />
                 <textarea
                   placeholder="Dime en que te ayudo:"
                   rows={6}
+                  value={form.message}
+                  onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
                   className={`w-full backdrop-blur-sm border rounded-lg px-4 py-3 focus:outline-none transition-colors resize-none ${isDark ? 'bg-slate-800/30 border-slate-700 text-white placeholder-slate-500 focus:border-sky-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-600'}`}
                 />
                 <button
                   type="submit"
-                  className={`w-full px-6 py-3 rounded-lg transition-all duration-300 font-semibold transform hover:scale-105 ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                  disabled={sending}
+                  className={`w-full px-6 py-3 rounded-lg transition-all duration-300 font-semibold transform hover:scale-105 ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'} ${sending ? 'opacity-70 cursor-not-allowed' : ''}`}
                 >
-                  Enviar mensaje
+                  {sending ? 'Enviando...' : 'Enviar mensaje'}
                 </button>
+                {feedback.type && (
+                  <p className={`text-sm mt-2 ${feedback.type === 'success' ? 'text-green-500' : 'text-red-500'}`}>
+                    {feedback.message}
+                  </p>
+                )}
               </form>
             </div>
           </div>
