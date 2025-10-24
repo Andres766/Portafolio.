@@ -63,12 +63,12 @@ export default function Portfolio() {
     }
 
     update()
-    window.addEventListener('scroll', onScroll, { passive: true } as any)
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      cancelAnimationFrame(rafId)
-    }
-  }, [])
+    window.addEventListener('scroll', onScroll, { passive: true })
+     return () => {
+       window.removeEventListener('scroll', onScroll)
+       cancelAnimationFrame(rafId)
+     }
+   }, [])
 
   // Datos de servicios
   const services = {
@@ -522,7 +522,7 @@ export default function Portfolio() {
                   </div>
                 </div>
                 <p className={`${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  "Excelente profesional, entrega trabajos de calidad y siempre cumple con los plazos establecidos. Muy recomendado."
+                  &quot;Excelente profesional, entrega trabajos de calidad y siempre cumple con los plazos establecidos. Muy recomendado.&quot;
                 </p>
               </div>
             ))}
