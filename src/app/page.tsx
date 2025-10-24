@@ -464,7 +464,7 @@ export default function Portfolio() {
               </div>
               
               <a 
-                href="https://wa.me/573123456789?text=Hola%20Andres,%20me%20interesa%20trabajar%20contigo" 
+                href="https://wa.me/573174570399?text=Hola%20Andres,%20me%20interesa%20trabajar%20contigo" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className={`flex items-center gap-3 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}
