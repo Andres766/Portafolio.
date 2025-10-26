@@ -869,7 +869,7 @@ export default function Portfolio() {
                 {projects[projectModal].tech}
               </p>
               <p className={`mb-6 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                {projects[projectModal].description}
+                {projects[projectModal].description[lang]}
               </p>
               
               <div className="flex gap-4">
@@ -880,7 +880,7 @@ export default function Portfolio() {
                   className={`flex items-center gap-2 px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-slate-800 text-white hover:bg-slate-700' : 'bg-gray-200 text-gray-900 hover:bg-gray-300'}`}
                 >
                   <FaGithub size={20} />
-                  Ver código
+                  {t('viewCode')}
                 </a>
                 <a 
                   href={projects[projectModal].demo}
@@ -892,7 +892,7 @@ export default function Portfolio() {
                     <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
                     <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
                   </svg>
-                  Ver demo
+                  {t('viewDemo')}
                 </a>
               </div>
             </div>
