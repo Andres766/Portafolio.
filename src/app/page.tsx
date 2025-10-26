@@ -17,6 +17,145 @@ export default function Portfolio() {
    const [sending, setSending] = useState(false)
    const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' })
 
+  // Idioma (ES/EN)
+  const [lang, setLang] = useState<'es' | 'en'>(() => {
+    if (typeof window === 'undefined') return 'es'
+    const saved = window.localStorage.getItem('lang')
+    return saved === 'en' ? 'en' : 'es'
+  })
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = lang
+    }
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('lang', lang)
+    }
+  }, [lang])
+
+  const translations: Record<string, Record<string, string>> = {
+    es: {
+      greeting: 'Un saludo, mi nombre es',
+      downloadCv: 'Descargar CV',
+      aboutMe: 'Sobre mi',
+      myExperience: 'Mi Experiencia',
+      frontendDeveloper: 'Desarrollador Frontend',
+      backendDeveloper: 'Desarrollador Backend',
+      skillCommunication: 'Comunicación',
+      skillDetailOriented: 'Detalle orientado',
+      skillTeamPlayer: 'Jugador del equipo',
+      contactMe: 'Contáctame',
+      myServices: 'Mis servicios',
+      whatIOffer: 'Lo que ofrezco',
+      talkToMe: 'Hablame',
+      emailLabel: 'Correo electrónico',
+      whatsappLabel: 'WhatsApp',
+      yourName: 'Tu nombre:',
+      yourEmail: 'Tu correo:',
+      yourMessage: 'Dime en que te ayudo:',
+      viewCode: 'Ver código',
+      navHome: 'Inicio',
+      navAbout: 'Sobre mí',
+      navExperience: 'Experiencia',
+      navServices: 'Servicios',
+      navProjects: 'Proyectos',
+      navContact: 'Contacto',
+      getInTouch: 'Ponte en contacto',
+      contactTitle: 'Contactame',
+      mySkills: 'Mis habilidades',
+      myJourney: 'Mi trayectoria',
+      experienceTitle: 'Experiencia',
+      changeLanguage: 'Cambiar idioma',
+      sendMeMessage: 'Envíame un mensaje',
+      visitProfile: 'Visita mi perfil',
+      connectWithMe: 'Conecta conmigo',
+      writeWhatYouNeed: 'Escríbeme lo que necesitas',
+      errorCompleteFields: 'Por favor completa nombre, email y mensaje.',
+      errorSending: 'Error al enviar',
+      successMessageSent: '¡Mensaje enviado! Te responderé pronto.',
+      errorGeneral: 'No se pudo enviar el mensaje. Intenta nuevamente más tarde.',
+      sending: 'Enviando...',
+      sendMessage: 'Enviar mensaje',
+      rightsReserved: 'Todos los derechos reservados.',
+      roleTitle: 'Desarrollador web Fullstack',
+      loadingPortfolio: 'Cargando portafolio...',
+      skillCriticalThinking: 'Pensamiento crítico',
+      skillProblemSolving: 'Resolución de problemas',
+      skillSelfAwareness: 'Autoconciencia',
+      viewDemo: 'Ver demo',
+      client: 'Cliente',
+      companyXyz: 'Empresa XYZ',
+      testimonialText: 'Excelente profesional, entrega trabajos de calidad y siempre cumple con los plazos establecidos. Muy recomendado.',
+      frontendDescription: 'Creo interfaces de usuario modernas, responsivas y accesibles utilizando las últimas tecnologías web. Me especializo en convertir diseños en código limpio y eficiente, garantizando una experiencia de usuario excepcional.',
+      backendDescription: 'Desarrollo APIs robustas y escalables, gestiono bases de datos y implemento lógica de negocio compleja. Me enfoco en crear sistemas seguros, eficientes y fáciles de mantener.',
+      mailtoBody: 'Hola Andres, me interesa trabajar contigo',
+      mailtoSubject: 'Contacto Portafolio',
+      whatsappText: 'Hola Andres, me interesa trabajar contigo',
+      bioBlurb: 'Soy estudiante de Ingeniería con más de dos años de experiencia en el desarrollo de proyectos académicos y profesionales, donde he fortalecido mis habilidades en el análisis, diseño y construcción de soluciones tecnológicas. Mi enfoque combina la capacidad de aprendizaje constante con la aplicación práctica de metodologías y herramientas de ingeniería, lo que me ha permitido aportar valor en diferentes contextos.'
+    },
+    en: {
+      greeting: 'Hi, my name is',
+      downloadCv: 'Download CV',
+      aboutMe: 'About me',
+      myExperience: 'My Experience',
+      frontendDeveloper: 'Frontend Developer',
+      backendDeveloper: 'Backend Developer',
+      skillCommunication: 'Communication',
+      skillDetailOriented: 'Attention to detail',
+      skillTeamPlayer: 'Team player',
+      contactMe: 'Contact me',
+      myServices: 'My services',
+      whatIOffer: 'What I offer',
+      talkToMe: 'Talk to me',
+      emailLabel: 'Email',
+      whatsappLabel: 'WhatsApp',
+      yourName: 'Your name:',
+      yourEmail: 'Your email:',
+      yourMessage: 'Tell me how I can help:',
+      viewCode: 'View code',
+      navHome: 'Home',
+      navAbout: 'About',
+      navExperience: 'Experience',
+      navServices: 'Services',
+      navProjects: 'Projects',
+      navContact: 'Contact',
+      getInTouch: 'Get in touch',
+      contactTitle: 'Contact me',
+      mySkills: 'My skills',
+      myJourney: 'My journey',
+      experienceTitle: 'Experience',
+      changeLanguage: 'Change language',
+      sendMeMessage: 'Send me a message',
+      visitProfile: 'Visit my profile',
+      connectWithMe: 'Connect with me',
+      writeWhatYouNeed: 'Write what you need',
+      errorCompleteFields: 'Please complete name, email and message.',
+      errorSending: 'Error sending',
+      successMessageSent: 'Message sent! I will reply soon.',
+      errorGeneral: 'Could not send the message. Try again later.',
+      sending: 'Sending...',
+      sendMessage: 'Send message',
+      rightsReserved: 'All rights reserved.',
+      roleTitle: 'Fullstack web developer',
+      loadingPortfolio: 'Loading portfolio...',
+      skillCriticalThinking: 'Critical thinking',
+      skillProblemSolving: 'Problem solving',
+      skillSelfAwareness: 'Self-awareness',
+      viewDemo: 'View demo',
+      client: 'Client',
+      companyXyz: 'Company XYZ',
+      testimonialText: 'Excellent professional, delivers quality work and always meets deadlines. Highly recommended.',
+      frontendDescription: 'I build modern, responsive and accessible user interfaces using the latest web technologies. I specialize in turning designs into clean and efficient code, ensuring an outstanding user experience.',
+      backendDescription: 'I develop robust and scalable APIs, manage databases and implement complex business logic. I focus on creating secure, efficient and maintainable systems.',
+      mailtoBody: 'Hello Andres, I would like to work with you',
+      mailtoSubject: 'Portfolio Contact',
+      whatsappText: 'Hello Andres, I would like to work with you',
+      bioBlurb: 'I am an engineering student with more than two years of experience building academic and professional projects, strengthening my skills in analysis, design, and building technological solutions. My approach combines constant learning with the practical application of engineering methodologies and tools, which has allowed me to add value in different contexts.'
+    },
+  }
+
+  const t = (key: string) => translations[lang][key] ?? key
+
   // Loading animation
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -76,14 +215,14 @@ export default function Portfolio() {
   // Datos de servicios
   const services = {
     frontend: {
-      title: 'Desarrollador Frontend',
-      description: 'Creo interfaces de usuario modernas, responsivas y accesibles utilizando las últimas tecnologías web. Me especializo en convertir diseños en código limpio y eficiente, garantizando una experiencia de usuario excepcional.',
+      titleKey: 'frontendDeveloper',
+      descriptionKey: 'frontendDescription',
       skills: ['React & Next.js', 'HTML5 & CSS3', 'Tailwind CSS', 'JavaScript/TypeScript', 'Responsive Design', 'UI/UX Implementation'],
       image: '🎨'
     },
     backend: {
-      title: 'Desarrollador Backend',
-      description: 'Desarrollo APIs robustas y escalables, gestiono bases de datos y implemento lógica de negocio compleja. Me enfoco en crear sistemas seguros, eficientes y fáciles de mantener.',
+      titleKey: 'backendDeveloper',
+      descriptionKey: 'backendDescription',
       skills: ['Node.js & Express', 'Python', 'SQL & NoSQL', 'REST APIs', 'Cloud Services (AWS)', 'Authentication & Security'],
       image: '⚙️'
     }
@@ -110,24 +249,24 @@ export default function Portfolio() {
 
   // Datos de proyectos
   const projects = [
-    { title: 'E-commerce Platform', tech: 'Next.js, Node.js, MongoDB', description: 'Plataforma completa de comercio electrónico con pasarela de pagos', repo: '#', demo: '#' },
-    { title: 'Task Manager App', tech: 'React, Firebase', description: 'Aplicación de gestión de tareas con sincronización en tiempo real', repo: '#', demo: '#' },
-    { title: 'Portfolio CMS', tech: 'Next.js, TypeScript', description: 'Sistema de gestión de contenido para portfolios personales', repo: '#', demo: '#' },
-    { title: 'Weather Dashboard', tech: 'React, API Integration', description: 'Dashboard meteorológico con visualización de datos', repo: '#', demo: '#' },
-    { title: 'Chat Application', tech: 'Node.js, Socket.io', description: 'Aplicación de chat en tiempo real con salas privadas', repo: '#', demo: '#' },
-    { title: 'Blog Platform', tech: 'Next.js, MDX', description: 'Plataforma de blog con markdown y optimización SEO', repo: '#', demo: '#' },
-    { title: 'Fitness Tracker', tech: 'React Native, Firebase', description: 'App móvil para seguimiento de ejercicios y nutrición', repo: '#', demo: '#' },
-    { title: 'Analytics Dashboard', tech: 'React, D3.js', description: 'Dashboard de análisis con gráficos interactivos', repo: '#', demo: '#' },
-    { title: 'Social Media API', tech: 'Node.js, PostgreSQL', description: 'API REST para aplicación de redes sociales', repo: '#', demo: '#' },
+    { title: 'E-commerce Platform', tech: 'Next.js, Node.js, MongoDB', description: { es: 'Plataforma completa de comercio electrónico con pasarela de pagos', en: 'Full e-commerce platform with payment gateway' }, repo: '#', demo: '#' },
+    { title: 'Task Manager App', tech: 'React, Firebase', description: { es: 'Aplicación de gestión de tareas con sincronización en tiempo real', en: 'Task management app with real-time sync' }, repo: '#', demo: '#' },
+    { title: 'Portfolio CMS', tech: 'Next.js, TypeScript', description: { es: 'Sistema de gestión de contenido para portfolios personales', en: 'Content management system for personal portfolios' }, repo: '#', demo: '#' },
+    { title: 'Weather Dashboard', tech: 'React, API Integration', description: { es: 'Dashboard meteorológico con visualización de datos', en: 'Weather dashboard with data visualization' }, repo: '#', demo: '#' },
+    { title: 'Chat Application', tech: 'Node.js, Socket.io', description: { es: 'Aplicación de chat en tiempo real con salas privadas', en: 'Real-time chat app with private rooms' }, repo: '#', demo: '#' },
+    { title: 'Blog Platform', tech: 'Next.js, MDX', description: { es: 'Plataforma de blog con markdown y optimización SEO', en: 'Blog platform with markdown and SEO optimization' }, repo: '#', demo: '#' },
+    { title: 'Fitness Tracker', tech: 'React Native, Firebase', description: { es: 'App móvil para seguimiento de ejercicios y nutrición', en: 'Mobile app for tracking workouts and nutrition' }, repo: '#', demo: '#' },
+    { title: 'Analytics Dashboard', tech: 'React, D3.js', description: { es: 'Dashboard de análisis con gráficos interactivos', en: 'Analytics dashboard with interactive charts' }, repo: '#', demo: '#' },
+    { title: 'Social Media API', tech: 'Node.js, PostgreSQL', description: { es: 'API REST para aplicación de redes sociales', en: 'REST API for a social media application' }, repo: '#', demo: '#' },
   ]
 
   const navItems = [
-    { id: 'home', label: 'Inicio', icon: <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /> },
-    { id: 'about', label: 'Sobre mí', icon: <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /> },
-    { id: 'experience', label: 'Experiencia', icon: <><path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" /></> },
-    { id: 'services', label: 'Servicios', icon: <><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" /></> },
-    { id: 'projects', label: 'Proyectos', icon: <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" /> },
-    { id: 'contact', label: 'Contacto', icon: <><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></> },
+    { id: 'home', label: t('navHome'), icon: <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /> },
+    { id: 'about', label: t('navAbout'), icon: <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /> },
+    { id: 'experience', label: t('navExperience'), icon: <><path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" /></> },
+    { id: 'services', label: t('navServices'), icon: <><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" /></> },
+    { id: 'projects', label: t('navProjects'), icon: <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" /> },
+    { id: 'contact', label: t('navContact'), icon: <><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></> },
   ]
 
   const scrollToSection = (id: string) => {
@@ -266,10 +405,19 @@ export default function Portfolio() {
         </a>
       </div>
 
+      {/* Language Toggle */}
+      <button 
+        onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
+        className={`fixed top-8 left-8 z-50 px-3 py-2 rounded-lg transition-all duration-300 transform hover:scale-110 ${isDark ? 'text-slate-200 hover:text-white hover:bg-slate-800' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200'}`}
+        aria-label={t('changeLanguage')}
+      >
+        {lang === 'es' ? 'EN' : 'ES'}
+      </button>
+
       {/* Theme Toggle */}
       <button 
         onClick={() => setIsDark(!isDark)}
-        className={`fixed top-8 right-8 z-50 p-2 rounded-lg transition-all duration-300 transform hover:scale-110 ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
+        className={`fixed top-8 right-8 z-50 p-2 rounded-lg transition-all duración-300 transform hover:scale-110 ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
       >
         {isDark ? (
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -285,19 +433,19 @@ export default function Portfolio() {
       {/* Hero Section */}
       <section id="home" className="min-h-screen flex flex-col items-center justify-center px-4 py-20">
         <div className="text-center space-y-8 max-w-4xl mx-auto">
-          <p className={`text-lg ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Un saludo, mi nombre es</p>
+          <p className={`text-lg ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('greeting')}</p>
           <h1 className="text-5xl md:text-7xl font-bold">Andres Cordoba</h1>
-          <p className={`text-xl md:text-2xl ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Fullstack web developer</p>
+          <p className={`text-xl md:text-2xl ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('roleTitle')}</p>
           
           <div className="flex flex-wrap gap-4 justify-center mt-8">
-            <button className={`px-8 py-3 border-2 rounded-lg transition-all duration-300 transform hover:scale-105 ${isDark ? 'border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-slate-950' : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
-              Descargar CV
+            <button className={`px-8 py-3 border-2 rounded-lg transition-all duración-300 transform hover:scale-105 ${isDark ? 'border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-slate-950' : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
+              {t('downloadCv')}
             </button>
             <button 
               onClick={() => scrollToSection('about')}
               className={`px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
             >
-              Sobre mi
+              {t('aboutMe')}
             </button>
           </div>
 
@@ -348,12 +496,12 @@ export default function Portfolio() {
       {/* About Section */}
       <section id="about" className="min-h-screen flex items-center px-4 py-20">
         <div className="max-w-6xl mx-auto w-full">
-          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Mis habilidades</p>
-          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Mi Experiencia</h2>
+          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('mySkills')}</p>
+          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('myExperience')}</h2>
           
           <div className="grid md:grid-cols-2 gap-8">
             <div className={`backdrop-blur-sm rounded-xl p-8 ${isDark ? 'bg-slate-800/30' : 'bg-white shadow-lg'}`}>
-              <h3 className={`text-2xl font-bold mb-6 text-center ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Desarrollador Frontend</h3>
+              <h3 className={`text-2xl font-bold mb-6 text-center ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('frontendDeveloper')}</h3>
               <div className="grid grid-cols-2 gap-4">
                 {frontendTech.map((tech) => (
                   <div key={tech.name} className={`p-4 rounded-lg flex items-center gap-3 transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
@@ -367,7 +515,7 @@ export default function Portfolio() {
             </div>
             
             <div className={`backdrop-blur-sm rounded-xl p-8 ${isDark ? 'bg-slate-800/30' : 'bg-white shadow-lg'}`}>
-              <h3 className={`text-2xl font-bold mb-6 text-center ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Desarrollador Backend</h3>
+              <h3 className={`text-2xl font-bold mb-6 text-center ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('backendDeveloper')}</h3>
               <div className="grid grid-cols-2 gap-4">
                 {backendTech.map((tech) => (
                   <div key={tech.name} className={`p-4 rounded-lg flex items-center gap-3 transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
@@ -386,8 +534,8 @@ export default function Portfolio() {
       {/* Experience Section */}
       <section id="experience" className="min-h-screen flex items-center px-4 py-20">
         <div className="max-w-6xl mx-auto w-full">
-          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Mi trayectoria</p>
-          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Experiencia</h2>
+          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('myJourney')}</p>
+          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('experienceTitle')}</h2>
           
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1">
@@ -414,34 +562,31 @@ export default function Portfolio() {
                 </div>
                 <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
                   <FaComments className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
-                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Comunicación</p>
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('skillCommunication')}</p>
                 </div>
                 <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
                   <FaClipboardList className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
-                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Detalle orientado</p>
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('skillDetailOriented')}</p>
                 </div>
                 <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
                   <FaUserFriends className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
-                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Jugador del equipo</p>
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('skillTeamPlayer')}</p>
                 </div>
                 <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
                   <FaBrain className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
-                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Autoconciencia</p>
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('skillSelfAwareness')}</p>
                 </div>
               </div>
               
               <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                Soy estudiante de Ingeniería con más de dos años de experiencia en el desarrollo de proyectos académicos y 
-                profesionales, donde he fortalecido mis habilidades en el análisis, diseño y construcción de soluciones 
-                tecnológicas. Mi enfoque combina la capacidad de aprendizaje constante con la aplicación práctica de 
-                metodologías y herramientas de ingeniería, lo que me ha permitido aportar valor en diferentes contextos.
+                {t('bioBlurb')}
               </p>
               
               <button 
                 onClick={() => scrollToSection('contact')}
                 className={`px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
               >
-                Contáctame
+                {t('contactMe')}
               </button>
             </div>
           </div>
@@ -451,12 +596,12 @@ export default function Portfolio() {
       {/* Services Section */}
       <section id="services" className="min-h-screen flex items-center px-4 py-20">
         <div className="max-w-6xl mx-auto w-full">
-          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Mis servicios</p>
-          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Lo que ofrezco</h2>
+          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('myServices')}</p>
+          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('whatIOffer')}</h2>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             <div className={`backdrop-blur-sm rounded-xl p-8 transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}>
-              <h3 className={`text-2xl font-bold mb-4 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>Frontend Desarrollador</h3>
+              <h3 className={`text-2xl font-bold mb-4 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('frontendDeveloper')}</h3>
               <button 
                 onClick={() => setServiceModal('frontend')}
                 className={`flex items-center justify-center gap-2 transition-colors mx-auto ${isDark ? 'text-sky-400 hover:text-sky-300' : 'text-blue-600 hover:text-blue-700'}`}
@@ -469,7 +614,7 @@ export default function Portfolio() {
             </div>
             
             <div className={`backdrop-blur-sm rounded-xl p-8 transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}>
-              <h3 className={`text-2xl font-bold mb-4 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>Backend Desarrollador</h3>
+              <h3 className={`text-2xl font-bold mb-4 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('backendDeveloper')}</h3>
               <button 
                 onClick={() => setServiceModal('backend')}
                 className={`flex items-center justify-center gap-2 transition-colors mx-auto ${isDark ? 'text-sky-400 hover:text-sky-300' : 'text-blue-600 hover:text-blue-700'}`}
@@ -520,13 +665,11 @@ export default function Portfolio() {
                     👤
                   </div>
                   <div>
-                    <h4 className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Cliente {i}</h4>
-                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Empresa XYZ</p>
+                    <h4 className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('client')} {i}</h4>
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('companyXyz')}</p>
                   </div>
                 </div>
-                <p className={`${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                  &quot;Excelente profesional, entrega trabajos de calidad y siempre cumple con los plazos establecidos. Muy recomendado.&quot;
-                </p>
+                <p className={`${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('testimonialText')}</p>
               </div>
             ))}
           </div>
@@ -536,32 +679,32 @@ export default function Portfolio() {
       {/* Contact Section */}
       <section id="contact" className="min-h-screen flex items-center px-4 py-20 pb-32">
         <div className="max-w-6xl mx-auto w-full">
-          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Ponte en contacto</p>
-          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Contactame</h2>
+          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('getInTouch')}</p>
+          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('contactTitle')}</h2>
           
           <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
             <div className="space-y-6">
-              <h3 className="text-2xl font-bold">Hablame</h3>
+              <h3 className="text-2xl font-bold">{t('talkToMe')}</h3>
               <a 
-                href="mailto:Andsebas1128@hotmail.com?subject=Contacto%20Portafolio&body=Hola%20Andres,%20me%20interesa%20trabajar%20contigo" 
+                href={`mailto:Andsebas1128@hotmail.com?subject=${encodeURIComponent(t('mailtoSubject'))}&body=${encodeURIComponent(t('mailtoBody'))}`} 
                 className={`flex items-center gap-3 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}
               >
                 <FaEnvelope className={`${isDark ? 'text-white' : 'text-gray-800'}`} size={32} />
                 <div>
-                  <p className={`mb-1 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Correo electrónico</p>
+                  <p className={`mb-1 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('emailLabel')}</p>
                   <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Andsebas1128@hotmail.com</p>
                 </div>
               </a>
               <a 
-                href="https://wa.me/573174570399?text=Hola%20Andres,%20me%20interesa%20trabajar%20contigo" 
+                href={`https://wa.me/573174570399?text=${encodeURIComponent(t('whatsappText'))}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className={`flex items-center gap-3 backdrop-blur-sm rounded-xl p-6 transition-all duración-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}
               >
                 <FaWhatsapp className="text-green-500" size={32} />
                 <div>
-                  <p className={`mb-1 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>WhatsApp</p>
-                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Envíame un mensaje</p>
+                  <p className={`mb-1 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('whatsappLabel')}</p>
+                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('sendMeMessage')}</p>
                 </div>
               </a>
               <a 
@@ -573,7 +716,7 @@ export default function Portfolio() {
                 <FaGithub className={`${isDark ? 'text-white' : 'text-gray-800'}`} size={32} />
                 <div>
                   <p className={`mb-1 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>GitHub</p>
-                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Visita mi perfil</p>
+                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('visitProfile')}</p>
                 </div>
               </a>
               <a 
@@ -585,17 +728,17 @@ export default function Portfolio() {
                 <FaLinkedin className="text-blue-600" size={32} />
                 <div>
                   <p className={`mb-1 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>LinkedIn</p>
-                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Conecta conmigo</p>
+                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('connectWithMe')}</p>
                 </div>
               </a>
             </div>
             
             <div className="space-y-6">
-              <h3 className="text-2xl font-bold">Escríbeme lo que necesitas</h3>
+              <h3 className="text-2xl font-bold">{t('writeWhatYouNeed')}</h3>
               <form className="space-y-4" onSubmit={async (e) => {
                 e.preventDefault()
                 if (!form.name.trim() || !form.message.trim() || !form.email.trim()) {
-                  setFeedback({ type: 'error', message: 'Por favor completa nombre, email y mensaje.' })
+                  setFeedback({ type: 'error', message: t('errorCompleteFields') })
                   return
                 }
                 try {
@@ -607,11 +750,11 @@ export default function Portfolio() {
                     body: JSON.stringify({ name: form.name, email: form.email, message: form.message })
                   })
                   const data = await res.json()
-                  if (!res.ok) throw new Error(data?.error || 'Error al enviar')
-                  setFeedback({ type: 'success', message: '¡Mensaje enviado! Te responderé pronto.' })
+                  if (!res.ok) throw new Error(t('errorSending'))
+                  setFeedback({ type: 'success', message: t('successMessageSent') })
                   setForm({ name: '', email: '', message: '' })
                 } catch (err) {
-                  const message = err instanceof Error ? err.message : 'No se pudo enviar el mensaje. Intenta nuevamente más tarde.'
+                  const message = err instanceof Error ? err.message : t('errorGeneral')
                   setFeedback({ type: 'error', message })
                 } finally {
                   setSending(false)
@@ -619,20 +762,20 @@ export default function Portfolio() {
               }}>
                 <input
                   type="text"
-                  placeholder="Tu nombre:"
+                  placeholder={t('yourName')}
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                   className={`w-full backdrop-blur-sm border rounded-lg px-4 py-3 focus:outline-none transition-colors ${isDark ? 'bg-slate-800/30 border-slate-700 text-white placeholder-slate-500 focus:border-sky-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-600'}`}
                 />
                 <input
                   type="email"
-                  placeholder="Tu correo:"
+                  placeholder={t('yourEmail')}
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                   className={`w-full backdrop-blur-sm border rounded-lg px-4 py-3 focus:outline-none transition-colors ${isDark ? 'bg-slate-800/30 border-slate-700 text-white placeholder-slate-500 focus:border-sky-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-600'}`}
                 />
                 <textarea
-                  placeholder="Dime en que te ayudo:"
+                  placeholder={t('yourMessage')}
                   rows={6}
                   value={form.message}
                   onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
@@ -643,7 +786,7 @@ export default function Portfolio() {
                   disabled={sending}
                   className={`w-full px-6 py-3 rounded-lg transition-all duration-300 font-semibold transform hover:scale-105 ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'} ${sending ? 'opacity-70 cursor-not-allowed' : ''}`}
                 >
-                  {sending ? 'Enviando...' : 'Enviar mensaje'}
+                  {sending ? t('sending') : t('sendMessage')}
                 </button>
                 {feedback.type && (
                   <p className={`text-sm mt-2 ${feedback.type === 'success' ? 'text-green-500' : 'text-red-500'}`}>
@@ -660,7 +803,7 @@ export default function Portfolio() {
       <footer className={`py-8 border-t relative z-10 ${isDark ? 'border-slate-800 bg-slate-950/50' : 'border-gray-200 bg-white/50'} backdrop-blur-sm`}>
         <div className="max-w-6xl mx-auto px-4 text-center">
           <p className={isDark ? 'text-slate-400' : 'text-gray-600'}>
-            © 2025 Andres Cordoba. Todos los derechos reservados.
+            © 2025 Andres Cordoba. {t('rightsReserved')}
           </p>
         </div>
       </footer>
@@ -679,10 +822,10 @@ export default function Portfolio() {
             <div className="text-center mb-6">
               <div className="text-6xl mb-4">{services[serviceModal].image}</div>
               <h3 className={`text-3xl font-bold mb-4 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>
-                {services[serviceModal].title}
+                {t(services[serviceModal].titleKey)}
               </h3>
               <p className={`mb-6 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
-                {services[serviceModal].description}
+                {t(services[serviceModal].descriptionKey)}
               </p>
             </div>
             
