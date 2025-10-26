@@ -91,7 +91,11 @@ export default function Portfolio() {
       mailtoBody: 'Hola Andres, me interesa trabajar contigo',
       mailtoSubject: 'Contacto Portafolio',
       whatsappText: 'Hola Andres, me interesa trabajar contigo',
-      bioBlurb: 'Soy estudiante de Ingeniería con más de dos años de experiencia en el desarrollo de proyectos académicos y profesionales, donde he fortalecido mis habilidades en el análisis, diseño y construcción de soluciones tecnológicas. Mi enfoque combina la capacidad de aprendizaje constante con la aplicación práctica de metodologías y herramientas de ingeniería, lo que me ha permitido aportar valor en diferentes contextos.'
+      bioBlurb: 'Soy estudiante de Ingeniería con más de dos años de experiencia en el desarrollo de proyectos académicos y profesionales, donde he fortalecido mis habilidades en el análisis, diseño y construcción de soluciones tecnológicas. Mi enfoque combina la capacidad de aprendizaje constante con la aplicación práctica de metodologías y herramientas de ingeniería, lo que me ha permitido aportar valor en diferentes contextos.',
+      portfolio: 'Portafolio',
+      myProjects: 'Mis proyectos',
+      whatTheySayAboutMe: 'Lo que dicen de mí',
+      testimonials: 'Testimonios'
     },
     en: {
       greeting: 'Hi, my name is',
@@ -150,7 +154,11 @@ export default function Portfolio() {
       mailtoBody: 'Hello Andres, I would like to work with you',
       mailtoSubject: 'Portfolio Contact',
       whatsappText: 'Hello Andres, I would like to work with you',
-      bioBlurb: 'I am an engineering student with more than two years of experience building academic and professional projects, strengthening my skills in analysis, design, and building technological solutions. My approach combines constant learning with the practical application of engineering methodologies and tools, which has allowed me to add value in different contexts.'
+      bioBlurb: 'I am an engineering student with more than two years of experience building academic and professional projects, strengthening my skills in analysis, design, and building technological solutions. My approach combines constant learning with the practical application of engineering methodologies and tools, which has allowed me to add value in different contexts.',
+      portfolio: 'Portfolio',
+      myProjects: 'My projects',
+      whatTheySayAboutMe: 'What they say about me',
+      testimonials: 'Testimonials'
     },
   }
 
@@ -312,7 +320,7 @@ export default function Portfolio() {
           <div className="h-full bg-gradient-to-r from-sky-400 to-sky-600 animate-loading-bar"></div>
         </div>
         
-        <p className="mt-4 text-slate-400 animate-pulse">Cargando portafolio...</p>
+        <p className="mt-4 text-slate-400 animate-pulse">{t('loadingPortfolio')}</p>
 
     </div>
   )
@@ -554,11 +562,11 @@ export default function Portfolio() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
                   <FaLightbulb className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
-                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Pensamiento crítico</p>
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('skillCriticalThinking')}</p>
                 </div>
                 <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
                   <FaTools className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
-                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Resolución de problemas</p>
+                  <p className={`text-sm ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('skillProblemSolving')}</p>
                 </div>
                 <div className={`p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-800' : 'bg-white shadow-md hover:shadow-xl'}`}>
                   <FaComments className={`mx-auto mb-2 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} size={24} />
@@ -632,8 +640,8 @@ export default function Portfolio() {
       {/* Projects Section */}
       <section id="projects" className="min-h-screen flex items-center px-4 py-20">
         <div className="max-w-6xl mx-auto w-full">
-          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Portafolio</p>
-          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Mis proyectos</h2>
+          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('portfolio')}</p>
+          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('myProjects')}</h2>
           
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, i) => (
@@ -654,8 +662,8 @@ export default function Portfolio() {
       {/* Testimonials Section */}
       <section id="testimonials" className="min-h-screen flex items-center px-4 py-20">
         <div className="max-w-6xl mx-auto w-full">
-          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Lo que dicen de mí</p>
-          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Testimonios</h2>
+          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('whatTheySayAboutMe')}</p>
+          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('testimonials')}</h2>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
