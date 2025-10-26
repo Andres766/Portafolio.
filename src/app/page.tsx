@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
-import { FaLinkedin, FaGithub, FaLightbulb, FaTools, FaComments, FaClipboardList, FaUserFriends, FaBrain, FaWhatsapp, FaTimes, FaHtml5, FaCss3Alt, FaJs, FaReact, FaBootstrap, FaGitAlt, FaNodeJs, FaPython, FaDatabase, FaFire, FaTerminal, FaAws } from 'react-icons/fa'
+import { FaLinkedin, FaGithub, FaLightbulb, FaTools, FaComments, FaClipboardList, FaUserFriends, FaBrain, FaWhatsapp, FaTimes, FaHtml5, FaCss3Alt, FaJs, FaReact, FaBootstrap, FaGitAlt, FaNodeJs, FaPython, FaDatabase, FaFire, FaTerminal, FaAws, FaEnvelope } from 'react-icons/fa'
 import { SiTypescript } from 'react-icons/si'
 
 export default function Portfolio() {
@@ -13,7 +13,7 @@ export default function Portfolio() {
   const [activeSection, setActiveSection] = useState('home')
   const [hoveredNav, setHoveredNav] = useState<string | null>(null)
    const iconsRef = useRef<HTMLDivElement>(null)
-   const [form, setForm] = useState({ name: '', message: '' })
+   const [form, setForm] = useState({ name: '', email: '', message: '' })
    const [sending, setSending] = useState(false)
    const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' })
 
@@ -356,7 +356,7 @@ export default function Portfolio() {
               <h3 className={`text-2xl font-bold mb-6 text-center ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Desarrollador Frontend</h3>
               <div className="grid grid-cols-2 gap-4">
                 {frontendTech.map((tech) => (
-                  <div key={tech.name} className={`p-4 rounded-lg flex items-center gap-3 transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-700' : 'bg-gray-50 hover:bg-gray-100'}`}>
+                  <div key={tech.name} className={`p-4 rounded-lg flex items-center gap-3 transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
                     <div className="flex-shrink-0">
                       {tech.icon}
                     </div>
@@ -370,7 +370,7 @@ export default function Portfolio() {
               <h3 className={`text-2xl font-bold mb-6 text-center ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>Desarrollador Backend</h3>
               <div className="grid grid-cols-2 gap-4">
                 {backendTech.map((tech) => (
-                  <div key={tech.name} className={`p-4 rounded-lg flex items-center gap-3 transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-700' : 'bg-gray-50 hover:bg-gray-100'}`}>
+                  <div key={tech.name} className={`p-4 rounded-lg flex items-center gap-3 transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800/50 hover:bg-slate-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
                     <div className="flex-shrink-0">
                       {tech.icon}
                     </div>
@@ -542,16 +542,21 @@ export default function Portfolio() {
           <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
             <div className="space-y-6">
               <h3 className="text-2xl font-bold">Hablame</h3>
-              <div className={`backdrop-blur-sm rounded-xl p-6 ${isDark ? 'bg-slate-800/30' : 'bg-white shadow-lg'}`}>
-                <p className={`mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Correo electronico</p>
-                <p className={isDark ? 'text-white' : 'text-gray-900'}>Andsebas1128@hotmail.com</p>
-              </div>
-              
+              <a 
+                href="mailto:Andsebas1128@hotmail.com?subject=Contacto%20Portafolio&body=Hola%20Andres,%20me%20interesa%20trabajar%20contigo" 
+                className={`flex items-center gap-3 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}
+              >
+                <FaEnvelope className={`${isDark ? 'text-white' : 'text-gray-800'}`} size={32} />
+                <div>
+                  <p className={`mb-1 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>Correo electrónico</p>
+                  <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Andsebas1128@hotmail.com</p>
+                </div>
+              </a>
               <a 
                 href="https://wa.me/573174570399?text=Hola%20Andres,%20me%20interesa%20trabajar%20contigo" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className={`flex items-center gap-3 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}
+                className={`flex items-center gap-3 backdrop-blur-sm rounded-xl p-6 transition-all duración-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}
               >
                 <FaWhatsapp className="text-green-500" size={32} />
                 <div>
@@ -589,8 +594,8 @@ export default function Portfolio() {
               <h3 className="text-2xl font-bold">Escríbeme lo que necesitas</h3>
               <form className="space-y-4" onSubmit={async (e) => {
                 e.preventDefault()
-                if (!form.name.trim() || !form.message.trim()) {
-                  setFeedback({ type: 'error', message: 'Por favor completa tu nombre y el mensaje.' })
+                if (!form.name.trim() || !form.message.trim() || !form.email.trim()) {
+                  setFeedback({ type: 'error', message: 'Por favor completa nombre, email y mensaje.' })
                   return
                 }
                 try {
@@ -599,14 +604,15 @@ export default function Portfolio() {
                   const res = await fetch('/api/contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: form.name, message: form.message })
+                    body: JSON.stringify({ name: form.name, email: form.email, message: form.message })
                   })
                   const data = await res.json()
                   if (!res.ok) throw new Error(data?.error || 'Error al enviar')
                   setFeedback({ type: 'success', message: '¡Mensaje enviado! Te responderé pronto.' })
-                  setForm({ name: '', message: '' })
+                  setForm({ name: '', email: '', message: '' })
                 } catch (err) {
-                  setFeedback({ type: 'error', message: 'No se pudo enviar el mensaje. Intenta nuevamente más tarde.' })
+                  const message = err instanceof Error ? err.message : 'No se pudo enviar el mensaje. Intenta nuevamente más tarde.'
+                  setFeedback({ type: 'error', message })
                 } finally {
                   setSending(false)
                 }
@@ -616,6 +622,13 @@ export default function Portfolio() {
                   placeholder="Tu nombre:"
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                  className={`w-full backdrop-blur-sm border rounded-lg px-4 py-3 focus:outline-none transition-colors ${isDark ? 'bg-slate-800/30 border-slate-700 text-white placeholder-slate-500 focus:border-sky-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-600'}`}
+                />
+                <input
+                  type="email"
+                  placeholder="Tu correo:"
+                  value={form.email}
+                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                   className={`w-full backdrop-blur-sm border rounded-lg px-4 py-3 focus:outline-none transition-colors ${isDark ? 'bg-slate-800/30 border-slate-700 text-white placeholder-slate-500 focus:border-sky-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-600'}`}
                 />
                 <textarea
@@ -658,7 +671,7 @@ export default function Portfolio() {
           <div className={`max-w-2xl w-full rounded-2xl p-8 relative animate-scale-in ${isDark ? 'bg-slate-900' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
             <button 
               onClick={() => setServiceModal(null)}
-              className={`absolute top-4 right-4 p-2 rounded-lg transition-all duration-300 transform hover:scale-110 hover:rotate-90 ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'}`}
+              className={`absolute top-4 right-4 p-2 rounded-lg transition-all duration-300 transform hover:scale-110 hover:rotate-90 ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
             >
               <FaTimes size={24} />
             </button>
