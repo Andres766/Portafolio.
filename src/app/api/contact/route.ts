@@ -1,4 +1,3 @@
-import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -21,7 +20,7 @@ export async function POST(req: Request) {
     // Dev logging setup
     const logsDir = path.join(process.cwd(), '.tmp')
     const logFile = path.join(logsDir, 'contact-dev-log.jsonl')
-    const log = async (entry: any) => {
+    const log = async (entry: Record<string, unknown>) => {
       try {
         await fs.promises.mkdir(logsDir, { recursive: true })
         await fs.promises.appendFile(logFile, JSON.stringify({ ts: new Date().toISOString(), ...entry }) + '\n', 'utf8')
@@ -55,8 +54,8 @@ export async function POST(req: Request) {
 
     await log({ name, email, message, status: 200, id: result?.data?.id || 'sent' })
     return Response.json({ ok: true, id: result?.data?.id || 'sent' }, { status: 200 })
-  } catch (err: any) {
-    const message = err?.message || 'Error interno del servidor.'
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Error interno del servidor.'
     return Response.json({ error: message }, { status: 500 })
   }
 }
