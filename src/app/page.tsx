@@ -257,7 +257,7 @@ export default function Portfolio() {
 
   // Datos de proyectos
   const projects = [
-    { title: 'E-commerce Platform', tech: 'Next.js, Node.js, MongoDB', description: { es: 'Plataforma completa de comercio electrónico con pasarela de pagos', en: 'Full e-commerce platform with payment gateway' }, repo: 'https://github.com/Andres766/Reproductor-de-musica', demo: 'https://reproductor-de-musica-nzcrytegu-andres766s-projects.vercel.app' },
+    { title: 'Reproductor de música', tech: 'Next.js', description: { es: 'Reproductor de música', en: 'Music player' }, repo: 'https://github.com/Andres766/Reproductor-de-musica', demo: 'https://reproductor-de-musica-nzcrytegu-andres766s-projects.vercel.app', image: '/reproductor.jpg' },
     { title: 'Task Manager App', tech: 'React, Firebase', description: { es: 'Aplicación de gestión de tareas con sincronización en tiempo real', en: 'Task management app with real-time sync' }, repo: '#', demo: '#' },
     { title: 'Portfolio CMS', tech: 'Next.js, TypeScript', description: { es: 'Sistema de gestión de contenido para portfolios personales', en: 'Content management system for personal portfolios' }, repo: '#', demo: '#' },
     { title: 'Weather Dashboard', tech: 'React, API Integration', description: { es: 'Dashboard meteorológico con visualización de datos', en: 'Weather dashboard with data visualization' }, repo: '#', demo: '#' },
@@ -646,8 +646,12 @@ export default function Portfolio() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, i) => (
               <div key={i} className={`backdrop-blur-sm rounded-xl overflow-hidden transition-all duration-300 group cursor-pointer transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`} onClick={() => setProjectModal(i)}>
-                <div className={`aspect-video flex items-center justify-center text-6xl ${isDark ? 'bg-slate-800' : 'bg-gray-200'}`}>
-                  💻
+                <div className={`aspect-video relative overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-gray-200'}`}>
+                  {project.image ? (
+                    <Image src={project.image} alt={project.title} fill className="object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-6xl">💻</div>
+                  )}
                 </div>
                 <div className="p-4">
                   <h3 className={`font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{project.title}</h3>
@@ -865,8 +869,12 @@ export default function Portfolio() {
               <FaTimes size={24} />
             </button>
             
-            <div className={`aspect-video flex items-center justify-center text-9xl ${isDark ? 'bg-slate-800' : 'bg-gray-200'}`}>
-              🖥️
+            <div className={`aspect-video relative overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-gray-200'}`}>
+              {projects[projectModal]?.image ? (
+                <Image src={projects[projectModal].image} alt={projects[projectModal].title} fill className="object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-9xl">🖥️</div>
+              )}
             </div>
             
             <div className="p-8">
