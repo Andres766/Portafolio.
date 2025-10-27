@@ -257,7 +257,7 @@ export default function Portfolio() {
 
   // Datos de proyectos
   const projects = [
-    { title: 'E-commerce Platform', tech: 'Next.js, Node.js, MongoDB', description: { es: 'Plataforma completa de comercio electrónico con pasarela de pagos', en: 'Full e-commerce platform with payment gateway' }, repo: '#', demo: '#' },
+    { title: 'E-commerce Platform', tech: 'Next.js, Node.js, MongoDB', description: { es: 'Plataforma completa de comercio electrónico con pasarela de pagos', en: 'Full e-commerce platform with payment gateway' }, repo: 'https://github.com/Andres766/Reproductor-de-musica', demo: 'https://reproductor-de-musica-nzcrytegu-andres766s-projects.vercel.app' },
     { title: 'Task Manager App', tech: 'React, Firebase', description: { es: 'Aplicación de gestión de tareas con sincronización en tiempo real', en: 'Task management app with real-time sync' }, repo: '#', demo: '#' },
     { title: 'Portfolio CMS', tech: 'Next.js, TypeScript', description: { es: 'Sistema de gestión de contenido para portfolios personales', en: 'Content management system for personal portfolios' }, repo: '#', demo: '#' },
     { title: 'Weather Dashboard', tech: 'React, API Integration', description: { es: 'Dashboard meteorológico con visualización de datos', en: 'Weather dashboard with data visualization' }, repo: '#', demo: '#' },
