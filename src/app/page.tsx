@@ -7,12 +7,14 @@ import { SiTypescript } from 'react-icons/si'
 
 export default function Portfolio() {
   const [isDark, setIsDark] = useState(true)
+  const [navBottom, setNavBottom] = useState(32)
   const [serviceModal, setServiceModal] = useState<'frontend' | 'backend' | null>(null)
   const [projectModal, setProjectModal] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeSection, setActiveSection] = useState('home')
   const [hoveredNav, setHoveredNav] = useState<string | null>(null)
    const iconsRef = useRef<HTMLDivElement>(null)
+   const footerRef = useRef<HTMLElement | null>(null)
    const [form, setForm] = useState({ name: '', email: '', message: '' })
    const [sending, setSending] = useState(false)
    const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' })
@@ -182,6 +184,26 @@ export default function Portfolio() {
       setLoading(false)
     }, 3000)
     return () => clearTimeout(timer)
+  }, [])
+
+  // Adjust navbar bottom to avoid covering the footer
+  useEffect(() => {
+    const update = () => {
+      if (!footerRef.current) return
+      const rect = footerRef.current.getBoundingClientRect()
+      const viewportH = window.innerHeight
+      const overlap = Math.max(0, viewportH - rect.top)
+      const base = 32 // px ~ bottom-8
+      const margin = 16 // px gap above footer
+      setNavBottom(base + (overlap > 0 ? overlap + margin : 0))
+    }
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
   }, [])
 
   // Detect active section on scroll
@@ -483,7 +505,10 @@ export default function Portfolio() {
         </div>
 
         {/* Bottom Navigation with Tooltips - Increased z-index */}
-        <nav className={`fixed bottom-8 left-1/2 -translate-x-1/2 backdrop-blur-sm rounded-full px-6 py-3 flex gap-6 z-[60] ${isDark ? 'bg-slate-800/90' : 'bg-white/90 shadow-lg'}`}>
+        <nav
+          className={`fixed left-1/2 -translate-x-1/2 backdrop-blur-sm rounded-full px-6 py-3 flex gap-6 z-[60] ${isDark ? 'bg-slate-800/90' : 'bg-white/90 shadow-lg'}`}
+          style={{ bottom: navBottom }}
+        >
           {navItems.map((item) => (
             <div key={item.id} className="relative group">
               <button 
@@ -830,7 +855,7 @@ export default function Portfolio() {
       </section>
 
       {/* Footer */}
-      <footer className={`py-8 border-t relative z-10 ${isDark ? 'border-slate-800 bg-slate-950/50' : 'border-gray-200 bg-white/50'} backdrop-blur-sm`}>
+      <footer ref={footerRef} className={`py-8 border-t relative z-10 ${isDark ? 'border-slate-800 bg-slate-950/50' : 'border-gray-200 bg-white/50'} backdrop-blur-sm`}>
         <div className="max-w-6xl mx-auto px-4 text-center">
           <p className={isDark ? 'text-slate-400' : 'text-gray-600'}>
             © 2025 Andres Cordoba. {t('rightsReserved')}
