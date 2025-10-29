@@ -598,6 +598,12 @@ export default function Portfolio() {
                 </div>
               </div>
               
+              {/* Bio breve */}
+              <div className={`rounded-lg p-4 ${isDark ? 'bg-slate-800/60 border border-slate-700 text-slate-200' : 'bg-white shadow-md text-gray-800'}`}>
+                <h4 className={`text-sm font-semibold mb-1 ${isDark ? 'text-sky-400' : 'text-blue-600'}`}>Bio</h4>
+                <p className="text-sm">Ingeniería de software 2023-2027 — Universidad Cooperativa de Colombia</p>
+              </div>
+
               <p className={`leading-relaxed ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
                 {t('bioBlurb')}
               </p>
