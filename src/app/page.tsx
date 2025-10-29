@@ -164,6 +164,18 @@ export default function Portfolio() {
 
   const t = (key: string) => translations[lang][key] ?? key
 
+  const handleToggleTheme = () => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.add('theme-switching')
+    }
+    setIsDark((prev: boolean) => !prev)
+    setTimeout(() => {
+      if (typeof document !== 'undefined') {
+        document.documentElement.classList.remove('theme-switching')
+      }
+    }, 200)
+  }
+
   // Loading animation
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -324,10 +336,10 @@ export default function Portfolio() {
 
     </div>
   )
-}
+  }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 relative ${isDark ? 'text-white' : 'text-gray-900'}`}>
+    <div className={`min-h-screen relative ${isDark ? 'text-white' : 'text-gray-900'}`}>
       {/* Animated Background */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className={`animated-bg ${isDark ? 'animated-bg-dark' : 'animated-bg-light'}`}></div>
@@ -416,7 +428,7 @@ export default function Portfolio() {
       {/* Language Toggle */}
       <button 
         onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
-        className={`fixed top-8 left-8 z-50 px-3 py-2 rounded-lg transition-all duration-300 transform hover:scale-110 ${isDark ? 'text-slate-200 hover:text-white hover:bg-slate-800' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200'}`}
+        className={`fixed top-8 left-8 z-50 px-3 py-2 rounded-lg transition duration-200 ease-in-out transform hover:scale-110 ${isDark ? 'text-slate-200 hover:text-white hover:bg-slate-800' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200'}`}
         aria-label={t('changeLanguage')}
       >
         {lang === 'es' ? 'EN' : 'ES'}
@@ -424,8 +436,8 @@ export default function Portfolio() {
 
       {/* Theme Toggle */}
       <button 
-        onClick={() => setIsDark(!isDark)}
-        className={`fixed top-8 right-8 z-50 p-2 rounded-lg transition-all duración-300 transform hover:scale-110 ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
+        onClick={handleToggleTheme}
+        className={`fixed top-8 right-8 z-50 p-2 rounded-lg transition-colors transition-transform duration-150 ease-out transform hover:scale-110 ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
       >
         {isDark ? (
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -446,12 +458,12 @@ export default function Portfolio() {
           <p className={`text-xl md:text-2xl ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('roleTitle')}</p>
           
           <div className="flex flex-wrap gap-4 justify-center mt-8">
-            <button className={`px-8 py-3 border-2 rounded-lg transition-all duración-300 transform hover:scale-105 ${isDark ? 'border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-slate-950' : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
+            <button className={`px-8 py-3 border-2 rounded-lg transition duration-200 ease-in-out transform hover:scale-105 ${isDark ? 'border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-slate-950' : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
               {t('downloadCv')}
             </button>
             <button 
               onClick={() => scrollToSection('about')}
-              className={`px-8 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+              className={`px-8 py-3 rounded-lg transition duration-200 ease-in-out transform hover:scale-105 ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
             >
               {t('aboutMe')}
             </button>
@@ -711,7 +723,7 @@ export default function Portfolio() {
                 href={`https://wa.me/573174570399?text=${encodeURIComponent(t('whatsappText'))}`} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className={`flex items-center gap-3 backdrop-blur-sm rounded-xl p-6 transition-all duración-300 transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}
+                className={`flex items-center gap-3 backdrop-blur-sm rounded-xl p-6 transition duration-200 ease-in-out transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`}
               >
                 <FaWhatsapp className="text-green-500" size={32} />
                 <div>
@@ -845,7 +857,7 @@ export default function Portfolio() {
               <h4 className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>Habilidades principales:</h4>
               <div className="grid grid-cols-2 gap-3">
                 {services[serviceModal].skills.map((skill) => (
-                  <div key={skill} className={`p-3 rounded-lg flex items-center gap-2 transform transition-all duration-300 hover:scale-105 ${isDark ? 'bg-slate-800 hover:bg-slate-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
+            <div key={skill} className={`p-3 rounded-lg flex items-center gap-2 transform transition-colors transition-transform duration-150 ease-out hover:scale-105 ${isDark ? 'bg-slate-800 hover:bg-slate-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
                     <svg className={`w-5 h-5 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>

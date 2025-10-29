@@ -188,3 +188,8 @@ body {
 .dur-17 { --dur: 17s; }
 .dur-18 { --dur: 18s; }
 .dur-20 { --dur: 20s; }
+/* Disable transitions momentarily during theme switch to avoid jank */
+.theme-switching,
+.theme-switching * {
+  transition: none !important;
+}
