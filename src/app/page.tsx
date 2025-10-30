@@ -19,12 +19,35 @@ export default function Portfolio() {
       const saved = window.localStorage.getItem('theme')
       if (saved === 'light') {
         setIsDark(false)
+        document.cookie = `theme=light; path=/; max-age=31536000`
+        document.documentElement.classList.remove('dark')
+        document.documentElement.classList.add('light')
       } else if (saved === 'dark') {
         setIsDark(true)
+        document.cookie = `theme=dark; path=/; max-age=31536000`
+        document.documentElement.classList.remove('light')
+        document.documentElement.classList.add('dark')
       } else if (window.matchMedia) {
         setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches)
+        const t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        document.cookie = `theme=${t}; path=/; max-age=31536000`
+        document.documentElement.classList.remove('light','dark')
+        document.documentElement.classList.add(t)
       }
     } catch {}
+  }, [])
+  // Loader theme resolved once on client to avoid flipping from dark to light
+  const [loaderTheme, setLoaderTheme] = useState<'dark' | 'light' | null>(null)
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem('theme')
+      if (saved === 'light') setLoaderTheme('light')
+      else if (saved === 'dark') setLoaderTheme('dark')
+      else if (window.matchMedia) setLoaderTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+      else setLoaderTheme('dark')
+    } catch {
+      setLoaderTheme('dark')
+    }
   }, [])
   const [navBottom, setNavBottom] = useState(32)
   const [serviceModal, setServiceModal] = useState<'frontend' | 'backend' | null>(null)
@@ -289,6 +312,12 @@ export default function Portfolio() {
       const next = !prev
       try {
         window.localStorage.setItem('theme', next ? 'dark' : 'light')
+        // Persist also in cookie for SSR to pick up on next request
+        document.cookie = `theme=${next ? 'dark' : 'light'}; path=/; max-age=31536000`
+        // Update html class immediately to avoid any flash
+        const html = document.documentElement
+        html.classList.remove('light','dark')
+        html.classList.add(next ? 'dark' : 'light')
       } catch {}
       return next
     })
@@ -450,29 +479,31 @@ export default function Portfolio() {
 
   // 
   if (loading) {
+    // Mostrar loader inmediatamente; usar fallback al estado actual si el tema del loader aún no está resuelto
+    const isLoaderDark = (loaderTheme !== null) ? loaderTheme === 'dark' : isDark
     return (
-      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center bg-gradient-to-br ${isLoaderDark ? 'from-slate-950 via-slate-900 to-slate-950' : 'from-white via-gray-100 to-white'}`}>
         <div className="relative">
           {/* Animated Code Brackets */}
-          <div className="text-sky-400 text-8xl md:text-9xl font-mono font-bold animate-pulse">
+          <div className={`${isLoaderDark ? 'text-sky-400' : 'text-blue-600'} text-8xl md:text-9xl font-mono font-bold animate-pulse`}>
             {'</>'}
           </div>
           
           {/* Orbiting Elements */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="absolute w-48 h-48 border-2 border-sky-400/30 rounded-full animate-spin-slow" style={{ animationDuration: '3s' }}>
-              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-sky-400 rounded-full"></div>
+            <div className={`absolute w-48 h-48 border-2 ${isLoaderDark ? 'border-sky-400/30' : 'border-blue-600/30'} rounded-full animate-spin-slow`} style={{ animationDuration: '3s' }}>
+              <div className={`absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 ${isLoaderDark ? 'bg-sky-400' : 'bg-blue-600'} rounded-full`}></div>
             </div>
-            <div className="absolute w-64 h-64 border-2 border-sky-500/20 rounded-full animate-spin-slow" style={{ animationDuration: '4s', animationDirection: 'reverse' }}>
-              <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-sky-500 rounded-full"></div>
+            <div className={`absolute w-64 h-64 border-2 ${isLoaderDark ? 'border-sky-500/20' : 'border-blue-500/20'} rounded-full animate-spin-slow`} style={{ animationDuration: '4s', animationDirection: 'reverse' }}>
+              <div className={`absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 ${isLoaderDark ? 'bg-sky-500' : 'bg-blue-500'} rounded-full`}></div>
             </div>
           </div>
           
           {/* Binary Code Effect */}
-          <div className="absolute -left-32 top-0 text-sky-400/20 text-xs font-mono animate-pulse">
+          <div className={`absolute -left-32 top-0 ${isLoaderDark ? 'text-sky-400/20' : 'text-blue-600/20'} text-xs font-mono animate-pulse`}>
             01001000<br/>01100101<br/>01101100<br/>01101100<br/>01101111
           </div>
-          <div className="absolute -right-32 top-0 text-sky-400/20 text-xs font-mono animate-pulse" style={{ animationDelay: '0.5s' }}>
+          <div className={`absolute -right-32 top-0 ${isLoaderDark ? 'text-sky-400/20' : 'text-blue-600/20'} text-xs font-mono animate-pulse`} style={{ animationDelay: '0.5s' }}>
             01010111<br/>01101111<br/>01110010<br/>01101100<br/>01100100
           </div>
         </div>
@@ -495,11 +526,11 @@ export default function Portfolio() {
         </h1>
         
         {/* Loading Bar */}
-        <div className="mt-8 w-64 h-1 bg-slate-800 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-sky-400 to-sky-600 animate-loading-bar"></div>
+        <div className={`mt-8 w-64 h-1 ${isLoaderDark ? 'bg-slate-800' : 'bg-gray-300'} rounded-full overflow-hidden`}>
+          <div className={`h-full bg-gradient-to-r ${isLoaderDark ? 'from-sky-400 to-sky-600' : 'from-blue-600 to-blue-500'} animate-loading-bar`}></div>
         </div>
         
-        <p className="mt-4 text-slate-400 animate-pulse">{t('loadingPortfolio')}</p>
+        <p className={`mt-4 ${isLoaderDark ? 'text-slate-400' : 'text-gray-500'} animate-pulse`}>{t('loadingPortfolio')}</p>
 
     </div>
   )
