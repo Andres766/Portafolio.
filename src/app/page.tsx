@@ -289,6 +289,25 @@ export default function Portfolio() {
     } catch {}
   }, [applyAccentTheme])
 
+  // Cursor global: seguir posición y mostrar/ocultar
+  useEffect(() => {
+    const root = document.documentElement
+    const onMove = (e: MouseEvent) => {
+      root.style.setProperty('--cursor-x', `${e.clientX}px`)
+      root.style.setProperty('--cursor-y', `${e.clientY}px`)
+      root.style.setProperty('--cursor-show', '1')
+    }
+    const onLeave = () => {
+      root.style.setProperty('--cursor-show', '0')
+    }
+    window.addEventListener('mousemove', onMove, { passive: true })
+    window.addEventListener('mouseleave', onLeave)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseleave', onLeave)
+    }
+  }, [])
+
   const handleToggleTheme = () => {
     if (typeof document !== 'undefined') {
       document.documentElement.classList.add('theme-switching')
@@ -637,6 +656,10 @@ export default function Portfolio() {
         ))}
       </div>
 
+      {/* Cursor personalizado global */}
+      <div className="cursor-dot" />
+      <div className="cursor-ring" />
+
       {/* Hero Section: split layout with photo ring */}
       <section id="home" className="min-h-screen flex items-center px-4 py-28 relative overflow-hidden" onMouseMove={handleHeroMouseMove} onMouseLeave={handleHeroMouseLeave}>
         {/* Floating Particles Background */}
@@ -690,14 +713,14 @@ export default function Portfolio() {
           <div className="flex flex-wrap gap-4 justify-center mt-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.8s', animationFillMode: 'forwards'}}>
             <button className={`group relative px-8 py-3 border-2 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl overflow-hidden cursor-pointer ${isDark ? 'border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-slate-950' : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
               <span className="relative z-10">{t('downloadCv')}</span>
-              <div className={`absolute inset-0 ${isDark ? 'bg-sky-400' : 'bg-blue-600'} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}></div>
+            <div className="absolute inset-0 bg-accent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
             </button>
             <button 
               onClick={() => scrollToSection('about')}
               className={`group relative px-8 py-3 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl overflow-hidden cursor-pointer ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
             >
               <span className="relative z-10">{t('aboutMe')}</span>
-              <div className={`absolute inset-0 ${isDark ? 'bg-sky-500' : 'bg-blue-700'} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-right`}></div>
+              <div className="absolute inset-0 bg-accent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-right"></div>
             </button>
           </div>
 
@@ -757,11 +780,11 @@ export default function Portfolio() {
                 onMouseLeave={() => setHoveredNav(null)}
                 className={`relative p-1.5 rounded-full transition-all duration-300 transform hover:scale-125 hover:-translate-y-1 cursor-pointer ${
                   activeSection === item.id 
-                    ? (isDark ? 'text-sky-400 active-pill-dark' : 'text-blue-600 active-pill-light')
+                    ? (isDark ? 'active-pill-dark' : 'active-pill-light')
                     : (isDark ? 'text-slate-400 hover:text-sky-400' : 'text-gray-600 hover:text-blue-600')
                 }`}
               >
-                <svg className={`w-5 h-5 ${activeSection === item.id ? 'drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]' : ''}`} fill="currentColor" viewBox="0 0 20 20">
+                <svg className={`w-5 h-5 ${activeSection === item.id ? 'drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]' : ''}`} fill="currentColor" viewBox="0 0 20 20" style={activeSection === item.id ? { color: 'rgb(var(--accent-rgb))' } : undefined}>
                   {item.icon}
                 </svg>
               </button>
