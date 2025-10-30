@@ -30,6 +30,7 @@ export default function Portfolio() {
   const [displayedText, setDisplayedText] = useState('')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showCursor, setShowCursor] = useState(true)
+  const [scrolled, setScrolled] = useState(false)
 
   // 3D tilt state for hero photo
   const [photoTilt, setPhotoTilt] = useState<{ rx: number; ry: number; scale: number }>({ rx: 0, ry: 0, scale: 1 })
@@ -310,6 +311,7 @@ export default function Portfolio() {
   // Detect active section on scroll
   useEffect(() => {
     const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
       const sections = ['home', 'about', 'experience', 'services', 'projects', 'achievements', 'contact']
       const scrollPosition = window.scrollY + window.innerHeight / 2
 
@@ -703,7 +705,7 @@ export default function Portfolio() {
 
         {/* Bottom Navigation with Tooltips - Increased z-index */}
         <nav
-          className={`fixed left-1/2 -translate-x-1/2 backdrop-blur-sm rounded-full px-6 py-3 flex gap-6 z-[60] ${isDark ? 'bg-slate-800/90' : 'bg-white/90 shadow-lg'}`}
+          className={`fixed left-1/2 -translate-x-1/2 rounded-full px-6 py-3 flex gap-6 z-[60] glass-nav ${scrolled ? 'glass-strong' : ''} ${isDark ? 'bg-slate-800/70' : 'bg-white/70 shadow-lg'}`}
           style={{ bottom: navBottom }}
         >
           {navItems.map((item) => (
@@ -712,10 +714,10 @@ export default function Portfolio() {
                 onClick={() => scrollToSection(item.id)}
                 onMouseEnter={() => setHoveredNav(item.id)}
                 onMouseLeave={() => setHoveredNav(null)}
-                className={`transition-all duration-300 transform hover:scale-125 hover:-translate-y-1 cursor-pointer ${
+                className={`relative p-2 rounded-full transition-all duration-300 transform hover:scale-125 hover:-translate-y-1 cursor-pointer ${
                   activeSection === item.id 
-                    ? isDark ? 'text-sky-400' : 'text-blue-600'
-                    : isDark ? 'text-slate-400 hover:text-sky-400' : 'text-gray-600 hover:text-blue-600'
+                    ? (isDark ? 'text-sky-400 active-pill-dark' : 'text-blue-600 active-pill-light')
+                    : (isDark ? 'text-slate-400 hover:text-sky-400' : 'text-gray-600 hover:text-blue-600')
                 }`}
               >
                 <svg className={`w-6 h-6 ${activeSection === item.id ? 'drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]' : ''}`} fill="currentColor" viewBox="0 0 20 20">
