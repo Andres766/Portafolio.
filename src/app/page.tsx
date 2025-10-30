@@ -19,6 +19,36 @@ export default function Portfolio() {
    const [sending, setSending] = useState(false)
    const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' })
 
+  // Typewriter effect for hero section
+  const [displayedText, setDisplayedText] = useState('')
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [showCursor, setShowCursor] = useState(true)
+
+  // Floating particles for background
+  const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, size: number, opacity: number, speed: number}>>([])
+
+  useEffect(() => {
+    const newParticles = Array.from({ length: 30 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 3 + 1,
+      opacity: Math.random() * 0.4 + 0.1,
+      speed: Math.random() * 2 + 1
+    }))
+    setParticles(newParticles)
+  }, [])
+
+  // (moved typewriter and reset effects below after 'lang' and 't' are defined)
+
+  // Cursor blinking effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowCursor(prev => !prev)
+    }, 500)
+    return () => clearInterval(interval)
+  }, [])
+
   // Idioma (ES/EN)
   const [lang, setLang] = useState<'es' | 'en'>(() => {
     if (typeof window === 'undefined') return 'es'
@@ -165,6 +195,24 @@ export default function Portfolio() {
   }
 
   const t = (key: string) => translations[lang][key] ?? key
+
+  // Typewriter effect for hero section (now that 't' is defined)
+  useEffect(() => {
+    const fullText = t('roleTitle')
+    if (currentIndex < fullText.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText(prev => prev + fullText[currentIndex])
+        setCurrentIndex(prev => prev + 1)
+      }, 100)
+      return () => clearTimeout(timeout)
+    }
+  }, [currentIndex, t])
+
+  // Reset typewriter when language changes (after 'lang' and 't' exist)
+  useEffect(() => {
+    setDisplayedText('')
+    setCurrentIndex(0)
+  }, [lang])
 
   const handleToggleTheme = () => {
     if (typeof document !== 'undefined') {
@@ -461,7 +509,7 @@ export default function Portfolio() {
       {/* Theme Toggle */}
       <button 
         onClick={handleToggleTheme}
-        className={`fixed top-8 right-8 z-50 p-2 rounded-lg transition-colors transition-transform duration-150 ease-out transform hover:scale-110 ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
+        className={`fixed top-8 right-8 z-50 p-2 rounded-lg transition-all duration-150 ease-out transform hover:scale-110 ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
       >
         {isDark ? (
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -474,34 +522,80 @@ export default function Portfolio() {
         )}
       </button>
 
-      {/* Hero Section */}
-      <section id="home" className="min-h-screen flex flex-col items-center justify-center px-4 py-20">
-        <div className="text-center space-y-8 max-w-4xl mx-auto">
-          <p className={`text-lg ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('greeting')}</p>
-          <h1 className="text-5xl md:text-7xl font-bold">Andres Cordoba</h1>
-          <p className={`text-xl md:text-2xl ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{t('roleTitle')}</p>
+      {/* Hero Section with Enhanced Design */}
+      <section id="home" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 relative overflow-hidden">
+        {/* Floating Particles Background */}
+        <div className="absolute inset-0 overflow-hidden">
+          {particles.map((particle) => (
+            <div
+              key={particle.id}
+              className={`absolute rounded-full animate-pulse ${isDark ? 'bg-sky-400' : 'bg-blue-500'}`}
+              style={{
+                left: `${particle.x}%`,
+                top: `${particle.y}%`,
+                width: `${particle.size}px`,
+                height: `${particle.size}px`,
+                opacity: particle.opacity,
+                animation: `float ${particle.speed + 2}s ease-in-out infinite alternate`
+              }}
+            />
+          ))}
+        </div>
+
+        {/* Gradient Overlay */}
+        <div className={`absolute inset-0 ${isDark ? 'bg-gradient-to-br from-slate-900/30 via-transparent to-slate-900/30' : 'bg-gradient-to-br from-white/30 via-transparent to-white/30'}`} />
+        
+        <div className="text-center space-y-8 max-w-4xl mx-auto relative z-10">
+          <div className="space-y-6">
+            <p className={`text-lg opacity-0 animate-fade-in-up ${isDark ? 'text-slate-400' : 'text-gray-600'}`} style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>{t('greeting')}</p>
+            
+            {/* Enhanced Name with Gradient Effect */}
+            <h1 className={`text-5xl md:text-7xl font-bold opacity-0 animate-fade-in-up bg-gradient-to-r ${isDark ? 'from-sky-400 via-blue-500 to-purple-600' : 'from-blue-600 via-purple-600 to-pink-600'} bg-clip-text text-transparent`} style={{animationDelay: '0.4s', animationFillMode: 'forwards'}}>
+              Andres Cordoba
+            </h1>
+            
+            {/* Typewriter Effect for Role */}
+            <div className={`text-xl md:text-2xl h-8 flex items-center justify-center opacity-0 animate-fade-in-up ${isDark ? 'text-slate-300' : 'text-gray-700'}`} style={{animationDelay: '0.6s', animationFillMode: 'forwards'}}>
+              <span className="font-mono">
+                {displayedText}
+                <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}>|</span>
+              </span>
+            </div>
+          </div>
           
-          <div className="flex flex-wrap gap-4 justify-center mt-8">
-            <button className={`px-8 py-3 border-2 rounded-lg transition duration-200 ease-in-out transform hover:scale-105 ${isDark ? 'border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-slate-950' : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
-              {t('downloadCv')}
+          {/* Enhanced Buttons with Ripple Effect */}
+          <div className="flex flex-wrap gap-4 justify-center mt-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.8s', animationFillMode: 'forwards'}}>
+            <button className={`group relative px-8 py-3 border-2 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl overflow-hidden ${isDark ? 'border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-slate-950' : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
+              <span className="relative z-10">{t('downloadCv')}</span>
+              <div className={`absolute inset-0 ${isDark ? 'bg-sky-400' : 'bg-blue-600'} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}></div>
             </button>
             <button 
               onClick={() => scrollToSection('about')}
-              className={`px-8 py-3 rounded-lg transition duration-200 ease-in-out transform hover:scale-105 ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+              className={`group relative px-8 py-3 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl overflow-hidden ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
             >
-              {t('aboutMe')}
+              <span className="relative z-10">{t('aboutMe')}</span>
+              <div className={`absolute inset-0 ${isDark ? 'bg-sky-500' : 'bg-blue-700'} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-right`}></div>
             </button>
           </div>
 
-          <div className="mt-12">
-            <div className={`w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-4 ${isDark ? 'border-slate-700' : 'border-gray-300'}`}>
+          {/* Enhanced Profile Image with Glow Effect */}
+          <div className="mt-12 opacity-0 animate-fade-in-up" style={{animationDelay: '1s', animationFillMode: 'forwards'}}>
+            <div className={`w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-4 relative ${isDark ? 'border-slate-700' : 'border-gray-300'}`}>
+              <div className={`absolute inset-0 rounded-full ${isDark ? 'bg-gradient-to-br from-sky-400/20 to-purple-600/20' : 'bg-gradient-to-br from-blue-600/20 to-pink-600/20'} animate-pulse`}></div>
               <Image 
                 src="/Andres.jpg" 
                 alt="Andres Cordoba" 
                 width={320} 
                 height={320} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover relative z-10 transition-transform duration-300 hover:scale-110"
               />
+            </div>
+          </div>
+
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce opacity-0 animate-fade-in-up" style={{animationDelay: '1.2s', animationFillMode: 'forwards'}}>
+            <div className={`w-6 h-10 border-2 rounded-full flex justify-center ${isDark ? 'border-sky-400' : 'border-blue-600'}`}>
+              <div className={`w-1 h-3 rounded-full mt-2 animate-pulse ${isDark ? 'bg-sky-400' : 'bg-blue-600'}`}></div>
             </div>
           </div>
         </div>
@@ -682,26 +776,85 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Projects Section */}
+      {/* Enhanced Projects Section */}
       <section id="projects" className="min-h-screen flex items-center px-4 py-20">
         <div className="max-w-6xl mx-auto w-full">
-          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('portfolio')}</p>
-          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('myProjects')}</h2>
+          <div className="text-center mb-16 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>
+            <p className={`mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('portfolio')}</p>
+            <h2 className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${isDark ? 'from-sky-400 via-blue-500 to-purple-600' : 'from-blue-600 via-purple-600 to-pink-600'} bg-clip-text text-transparent`}>{t('myProjects')}</h2>
+          </div>
           
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, i) => (
-              <div key={i} className={`backdrop-blur-sm rounded-xl overflow-hidden transition-all duration-300 group cursor-pointer transform hover:scale-105 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50' : 'bg-white shadow-lg hover:shadow-xl'}`} onClick={() => setProjectModal(i)}>
-                <div className={`aspect-video relative overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-gray-200'}`}>
+              <div 
+                key={i} 
+                className={`group relative backdrop-blur-sm rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer transform hover:scale-105 hover:-translate-y-2 opacity-0 animate-fade-in-up ${isDark ? 'bg-slate-800/20 hover:bg-slate-800/40 border border-slate-700/50' : 'bg-white/80 hover:bg-white shadow-lg hover:shadow-2xl border border-gray-200/50'}`}
+                style={{animationDelay: `${0.4 + i * 0.1}s`, animationFillMode: 'forwards'}}
+                onClick={() => setProjectModal(i)}
+              >
+                {/* Project Image with Overlay */}
+                <div className="aspect-video relative overflow-hidden">
                   {project.image ? (
-                    <Image src={project.image} alt={project.title} fill className="object-cover" />
+                    <Image 
+                      src={project.image} 
+                      alt={project.title} 
+                      fill 
+                      className="object-cover transition-transform duration-500 group-hover:scale-110" 
+                    />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-6xl">💻</div>
+                    <div className={`w-full h-full flex items-center justify-center text-6xl ${isDark ? 'bg-slate-800' : 'bg-gray-200'}`}>💻</div>
                   )}
+                  
+                  {/* Gradient Overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-t ${isDark ? 'from-slate-900/80 via-slate-900/20 to-transparent' : 'from-gray-900/60 via-gray-900/10 to-transparent'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+                  
+                  {/* Hover Actions */}
+                  <div className="absolute inset-0 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                    <a 
+                      href={project.repo} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={`p-3 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 ${isDark ? 'bg-slate-800/80 text-sky-400 hover:bg-sky-400 hover:text-slate-900' : 'bg-white/90 text-blue-600 hover:bg-blue-600 hover:text-white'}`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <FaGithub size={20} />
+                    </a>
+                    <a 
+                      href={project.demo} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className={`p-3 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 ${isDark ? 'bg-slate-800/80 text-sky-400 hover:bg-sky-400 hover:text-slate-900' : 'bg-white/90 text-blue-600 hover:bg-blue-600 hover:text-white'}`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  </div>
+
+                  {/* Tech Badge */}
+                  <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${isDark ? 'bg-slate-800/80 text-sky-400' : 'bg-white/90 text-blue-600'}`}>
+                    {project.tech}
+                  </div>
                 </div>
-                <div className="p-4">
-                  <h3 className={`font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{project.title}</h3>
-                  <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{project.tech}</p>
+
+                {/* Project Info */}
+                <div className="p-6">
+                  <h3 className={`font-bold text-lg mb-2 transition-colors group-hover:${isDark ? 'text-sky-400' : 'text-blue-600'} ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    {project.title}
+                  </h3>
+                  <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>
+                    {project.description[lang]}
+                  </p>
+                  
+                  {/* Progress Bar Animation */}
+                  <div className={`mt-4 h-1 rounded-full overflow-hidden ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
+                    <div className={`h-full bg-gradient-to-r ${isDark ? 'from-sky-400 to-blue-500' : 'from-blue-500 to-purple-600'} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left`}></div>
+                  </div>
                 </div>
+
+                {/* Glassmorphism Border Effect */}
+                <div className={`absolute inset-0 rounded-2xl border transition-all duration-300 ${isDark ? 'border-sky-400/0 group-hover:border-sky-400/30' : 'border-blue-500/0 group-hover:border-blue-500/30'}`}></div>
               </div>
             ))}
           </div>
@@ -841,9 +994,23 @@ export default function Portfolio() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className={`w-full px-6 py-3 rounded-lg transition-all duration-300 font-semibold transform hover:scale-105 ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'} ${sending ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  className={`group relative w-full px-6 py-4 rounded-xl font-semibold transition-all duration-500 transform hover:scale-105 hover:-translate-y-1 ripple overflow-hidden ${isDark ? 'bg-gradient-to-r from-sky-400 to-blue-500 text-slate-950 hover:from-sky-500 hover:to-blue-600 shadow-lg shadow-sky-400/25 hover:shadow-sky-400/40' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40'} ${sending ? 'opacity-70 cursor-not-allowed scale-95' : 'hover:shadow-2xl'}`}
                 >
-                  {sending ? t('sending') : t('sendMessage')}
+                  <span className={`flex items-center justify-center gap-2 transition-all duration-300 ${sending ? 'opacity-0' : 'opacity-100'}`}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                    {t('sendMessage')}
+                  </span>
+                  {sending && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="flex items-center gap-2">
+                        <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                        <span>{t('sending')}</span>
+                      </div>
+                    </div>
+                  )}
+                  <div className={`absolute inset-0 bg-gradient-to-r ${isDark ? 'from-sky-300 to-blue-400' : 'from-blue-500 to-purple-500'} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
                 </button>
                 {feedback.type && (
                   <p className={`text-sm mt-2 ${feedback.type === 'success' ? 'text-green-500' : 'text-red-500'}`}>
@@ -890,7 +1057,7 @@ export default function Portfolio() {
               <h4 className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>Habilidades principales:</h4>
               <div className="grid grid-cols-2 gap-3">
                 {services[serviceModal].skills.map((skill) => (
-            <div key={skill} className={`p-3 rounded-lg flex items-center gap-2 transform transition-colors transition-transform duration-150 ease-out hover:scale-105 ${isDark ? 'bg-slate-800 hover:bg-slate-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
+            <div key={skill} className={`p-3 rounded-lg flex items-center gap-2 transform transition-all duration-150 ease-out hover:scale-105 ${isDark ? 'bg-slate-800 hover:bg-slate-700' : 'bg-gray-100 hover:bg-gray-200'}`}>
                     <svg className={`w-5 h-5 ${isDark ? 'text-sky-400' : 'text-blue-600'}`} fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
