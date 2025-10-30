@@ -326,11 +326,19 @@ html {
   inset: 0;
   pointer-events: none;
   z-index: -1;
+  /* Defaults for cursor-driven parallax */
+  --mouseX: 0px;
+  --mouseY: 0px;
 }
 .floating-wrap {
   position: absolute;
   will-change: transform;
-  transform: translate3d(0, calc(var(--scrollY, 0px) * var(--speed, 0.05)), 0);
+  /* Scroll parallax + subtle cursor parallax scaled by speed */
+  transform: translate3d(
+    calc(var(--mouseX, 0px) * var(--speed, 0.05)),
+    calc(var(--scrollY, 0px) * var(--speed, 0.05) + var(--mouseY, 0px) * var(--speed, 0.05)),
+    0
+  );
 }
 .floating-icon {
   position: absolute;

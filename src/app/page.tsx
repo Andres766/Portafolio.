@@ -35,6 +35,24 @@ export default function Portfolio() {
   const [photoTilt, setPhotoTilt] = useState<{ rx: number; ry: number; scale: number }>({ rx: 0, ry: 0, scale: 1 })
   const [glarePos, setGlarePos] = useState<{ x: number; y: number }>({ x: 50, y: 50 })
 
+  // Cursor parallax for floating background icons
+  const handleHeroMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (!iconsRef.current) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const dx = (x / rect.width - 0.5) * 60 // px offset, subtle
+    const dy = (y / rect.height - 0.5) * 60 // px offset, subtle
+    iconsRef.current.style.setProperty('--mouseX', `${dx}px`)
+    iconsRef.current.style.setProperty('--mouseY', `${dy}px`)
+  }
+
+  const handleHeroMouseLeave = () => {
+    if (!iconsRef.current) return
+    iconsRef.current.style.setProperty('--mouseX', `0px`)
+    iconsRef.current.style.setProperty('--mouseY', `0px`)
+  }
+
   const handlePhotoMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
@@ -577,7 +595,7 @@ export default function Portfolio() {
       </button>
 
       {/* Hero Section: split layout with photo ring */}
-      <section id="home" className="min-h-screen flex items-center px-4 py-28 relative overflow-hidden">
+      <section id="home" className="min-h-screen flex items-center px-4 py-28 relative overflow-hidden" onMouseMove={handleHeroMouseMove} onMouseLeave={handleHeroMouseLeave}>
         {/* Floating Particles Background */}
         <div className="absolute inset-0 overflow-hidden">
           {particles.map((particle) => (
