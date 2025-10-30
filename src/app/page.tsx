@@ -409,8 +409,20 @@ export default function Portfolio() {
         </div>
         
         {/* Name */}
-        <h1 className="mt-16 text-4xl md:text-5xl font-bold text-white animate-fade-in">
-          Andres Cordoba
+        <h1 className="mt-16 text-4xl md:text-5xl font-bold animate-fade-in">
+          {"Andres Cordoba".split("").map((ch, i) => (
+            ch === " " ? (
+              <span key={i} className="inline-block">&nbsp;</span>
+            ) : (
+              <span
+                key={i}
+                className={`inline-block bg-gradient-to-r ${isDark ? 'from-sky-400 via-blue-500 to-purple-600' : 'from-blue-600 via-purple-600 to-pink-600'} bg-clip-text text-transparent animated-gradient-text`}
+                style={{ animationDelay: `${i * 0.12}s` }}
+              >
+                {ch}
+              </span>
+            )
+          ))}
         </h1>
         
         {/* Loading Bar */}
@@ -562,8 +574,20 @@ export default function Portfolio() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center space-y-6">
             <p className={`${isDark ? 'text-slate-400' : 'text-gray-600'} text-base`}>{t('greeting')}</p>
-            <h1 className={`text-5xl md:text-7xl font-bold bg-gradient-to-r ${isDark ? 'from-sky-400 via-blue-500 to-purple-600' : 'from-blue-600 via-purple-600 to-pink-600'} bg-clip-text text-transparent`}>
-              Andres Cordoba
+            <h1 className={`text-5xl md:text-7xl font-bold`}>
+              {"Andres Cordoba".split("").map((ch, i) => (
+                ch === " " ? (
+                  <span key={i} className="inline-block">&nbsp;</span>
+                ) : (
+                  <span
+                    key={i}
+                    className={`inline-block bg-gradient-to-r ${isDark ? 'from-sky-400 via-blue-500 to-purple-600' : 'from-blue-600 via-purple-600 to-pink-600'} bg-clip-text text-transparent animated-gradient-text`}
+                    style={{ animationDelay: `${i * 0.12}s` }}
+                  >
+                    {ch}
+                  </span>
+                )
+              ))}
             </h1>
             <div className={`text-xl md:text-2xl h-8 flex items-center justify-center ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
               <span className="font-mono">

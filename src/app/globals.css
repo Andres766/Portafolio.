@@ -248,6 +248,19 @@ html {
   opacity: 0.35;
 }
 
+/* Animated gradient for text: smoothly changes colors over time */
+@keyframes moveGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-gradient-text {
+  background-size: 200% 200%;
+  animation: moveGradient 6s ease-in-out infinite;
+}
+
+
 /* Floating background icons */
 .floating-icons {
   position: absolute;
