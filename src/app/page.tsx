@@ -12,7 +12,20 @@ type CSSVars = React.CSSProperties & {
 }
 
 export default function Portfolio() {
-  const [isDark, setIsDark] = useState(true)
+  const [isDark, setIsDark] = useState<boolean>(true)
+  // Sync theme from localStorage after mount to avoid hydration mismatches
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem('theme')
+      if (saved === 'light') {
+        setIsDark(false)
+      } else if (saved === 'dark') {
+        setIsDark(true)
+      } else if (window.matchMedia) {
+        setIsDark(window.matchMedia('(prefers-color-scheme: dark)').matches)
+      }
+    } catch {}
+  }, [])
   const [navBottom, setNavBottom] = useState(32)
   const [serviceModal, setServiceModal] = useState<'frontend' | 'backend' | null>(null)
   const [projectModal, setProjectModal] = useState<number | null>(null)
@@ -272,7 +285,13 @@ export default function Portfolio() {
     if (typeof document !== 'undefined') {
       document.documentElement.classList.add('theme-switching')
     }
-    setIsDark((prev: boolean) => !prev)
+    setIsDark((prev: boolean) => {
+      const next = !prev
+      try {
+        window.localStorage.setItem('theme', next ? 'dark' : 'light')
+      } catch {}
+      return next
+    })
     setTimeout(() => {
       if (typeof document !== 'undefined') {
         document.documentElement.classList.remove('theme-switching')
@@ -699,12 +718,6 @@ export default function Portfolio() {
             </div>
           </div>
         
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce opacity-0 animate-fade-in-up" style={{animationDelay: '1.2s', animationFillMode: 'forwards'}}>
-            <div className={`w-6 h-10 border-2 rounded-full flex justify-center ${isDark ? 'border-sky-400' : 'border-blue-600'}`}>
-              <div className={`w-1 h-3 rounded-full mt-2 animate-pulse ${isDark ? 'bg-sky-400' : 'bg-blue-600'}`}></div>
-            </div>
-          </div>
         </div>
 
         {/* Bottom Navigation with Tooltips - Increased z-index */}
