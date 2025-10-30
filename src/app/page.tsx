@@ -194,8 +194,10 @@ export default function Portfolio() {
       const viewportH = window.innerHeight
       const overlap = Math.max(0, viewportH - rect.top)
       const base = 32 // px ~ bottom-8
-      const margin = 16 // px gap above footer
-      setNavBottom(base + (overlap > 0 ? overlap + margin : 0))
+      const margin = 16 // px gap por encima del footer
+      const maxBottom = 96 // px ~ bottom-24 (límite superior)
+      const computed = base + (overlap > 0 ? overlap + margin : 0)
+      setNavBottom(Math.min(computed, maxBottom))
     }
     update()
     window.addEventListener('scroll', update, { passive: true })
@@ -292,7 +294,7 @@ export default function Portfolio() {
   // Datos de proyectos
   const projects = [
     { title: 'Reproductor de música', tech: 'Next.js', description: { es: 'Reproductor de música', en: 'Music player' }, repo: 'https://github.com/Andres766/Reproductor-de-musica', demo: 'https://reproductor-de-musica-nzcrytegu-andres766s-projects.vercel.app', image: '/reproductor.jpg' },
-    { title: 'Task Manager App', tech: 'React, Firebase', description: { es: 'Aplicación de gestión de tareas con sincronización en tiempo real', en: 'Task management app with real-time sync' }, repo: '#', demo: '#' },
+    { title: 'Buscador de peliculas y series', tech: 'Next.js, Tailwind', description: { es: 'Explorador de películas y series con buscador, fichas y tendencias.', en: 'Movies and series search with discovery and details.' }, repo: 'https://github.com/Andres766/Cinemix', demo: 'https://cinemix-eosin.vercel.app', image: '/apppelicula.jpg' },
     { title: 'Portfolio CMS', tech: 'Next.js, TypeScript', description: { es: 'Sistema de gestión de contenido para portfolios personales', en: 'Content management system for personal portfolios' }, repo: '#', demo: '#' },
     { title: 'Weather Dashboard', tech: 'React, API Integration', description: { es: 'Dashboard meteorológico con visualización de datos', en: 'Weather dashboard with data visualization' }, repo: '#', demo: '#' },
     { title: 'Chat Application', tech: 'Node.js, Socket.io', description: { es: 'Aplicación de chat en tiempo real con salas privadas', en: 'Real-time chat app with private rooms' }, repo: '#', demo: '#' },
