@@ -31,6 +31,8 @@ export default function Portfolio() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showCursor, setShowCursor] = useState(true)
   const [scrolled, setScrolled] = useState(false)
+  type AccentTheme = 'default' | 'dawn' | 'dusk' | 'neon'
+  const [accentTheme, setAccentTheme] = useState<AccentTheme>('default')
 
   // 3D tilt state for hero photo
   const [photoTilt, setPhotoTilt] = useState<{ rx: number; ry: number; scale: number }>({ rx: 0, ry: 0, scale: 1 })
@@ -265,6 +267,27 @@ export default function Portfolio() {
     setDisplayedText('')
     setCurrentIndex(0)
   }, [lang])
+
+  const applyAccentTheme = useCallback((theme: AccentTheme) => {
+    const root = document.documentElement
+    root.classList.remove('theme-dawn', 'theme-dusk', 'theme-neon')
+    if (theme !== 'default') {
+      root.classList.add(`theme-${theme}`)
+    }
+    setAccentTheme(theme)
+    try {
+      localStorage.setItem('accentTheme', theme)
+    } catch {}
+  }, [])
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('accentTheme') as AccentTheme | null
+      if (saved) {
+        applyAccentTheme(saved)
+      }
+    } catch {}
+  }, [applyAccentTheme])
 
   const handleToggleTheme = () => {
     if (typeof document !== 'undefined') {
@@ -596,6 +619,24 @@ export default function Portfolio() {
         )}
       </button>
 
+      {/* Accent Theme Selector (Dawn/Dusk/Neon) */}
+      <div className="fixed top-8 right-24 z-50 flex items-center gap-2">
+        {[
+          { key: 'default', color: 'rgb(56,189,248)', label: 'Default' },
+          { key: 'dawn', color: 'rgb(255,184,108)', label: 'Dawn' },
+          { key: 'dusk', color: 'rgb(147,51,234)', label: 'Dusk' },
+          { key: 'neon', color: 'rgb(0,255,196)', label: 'Neon' },
+        ].map(opt => (
+          <button
+            key={opt.key}
+            aria-label={opt.label}
+            onClick={() => applyAccentTheme(opt.key as AccentTheme)}
+            className={`w-6 h-6 rounded-full border transition-transform duration-200 hover:scale-110 ${accentTheme === opt.key ? 'ring-2 ring-white/70' : ''}`}
+            style={{ backgroundColor: opt.color }}
+          />
+        ))}
+      </div>
+
       {/* Hero Section: split layout with photo ring */}
       <section id="home" className="min-h-screen flex items-center px-4 py-28 relative overflow-hidden" onMouseMove={handleHeroMouseMove} onMouseLeave={handleHeroMouseLeave}>
         {/* Floating Particles Background */}
@@ -720,7 +761,7 @@ export default function Portfolio() {
                     : (isDark ? 'text-slate-400 hover:text-sky-400' : 'text-gray-600 hover:text-blue-600')
                 }`}
               >
-                <svg className={`w-6 h-6 ${activeSection === item.id ? 'drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]' : ''}`} fill="currentColor" viewBox="0 0 20 20">
+                <svg className={`w-5 h-5 ${activeSection === item.id ? 'drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]' : ''}`} fill="currentColor" viewBox="0 0 20 20">
                   {item.icon}
                 </svg>
               </button>
