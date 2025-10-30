@@ -705,7 +705,7 @@ export default function Portfolio() {
 
         {/* Bottom Navigation with Tooltips - Increased z-index */}
         <nav
-          className={`fixed left-1/2 -translate-x-1/2 rounded-full px-4 py-2 flex gap-4 z-[60] glass-nav ${scrolled ? 'glass-strong' : ''} ${isDark ? 'bg-slate-800/70' : 'bg-white/70 shadow-lg'}`}
+          className={`fixed left-1/2 -translate-x-1/2 rounded-full px-5 py-2.5 flex gap-5 z-[60] glass-nav ${scrolled ? 'glass-strong' : ''} ${isDark ? 'bg-slate-800/70' : 'bg-white/70 shadow-lg'}`}
           style={{ bottom: navBottom }}
         >
           {navItems.map((item) => (
@@ -714,13 +714,13 @@ export default function Portfolio() {
                 onClick={() => scrollToSection(item.id)}
                 onMouseEnter={() => setHoveredNav(item.id)}
                 onMouseLeave={() => setHoveredNav(null)}
-                className={`relative p-1 rounded-full transition-all duration-300 transform hover:scale-125 hover:-translate-y-1 cursor-pointer ${
+                className={`relative p-1.5 rounded-full transition-all duration-300 transform hover:scale-125 hover:-translate-y-1 cursor-pointer ${
                   activeSection === item.id 
                     ? (isDark ? 'text-sky-400 active-pill-dark' : 'text-blue-600 active-pill-light')
                     : (isDark ? 'text-slate-400 hover:text-sky-400' : 'text-gray-600 hover:text-blue-600')
                 }`}
               >
-                <svg className={`w-5 h-5 ${activeSection === item.id ? 'drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]' : ''}`} fill="currentColor" viewBox="0 0 20 20">
+                <svg className={`w-6 h-6 ${activeSection === item.id ? 'drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]' : ''}`} fill="currentColor" viewBox="0 0 20 20">
                   {item.icon}
                 </svg>
               </button>
