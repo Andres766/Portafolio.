@@ -430,10 +430,10 @@ html {
 .active-pill-dark::before {
   content: '';
   position: absolute;
-  inset: -4px;
+  inset: -2px;
   border-radius: 9999px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.35), transparent 70%);
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.45);
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 70%);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.28);
 }
 .active-pill-light {
   position: relative;
@@ -441,8 +441,8 @@ html {
 .active-pill-light::before {
   content: '';
   position: absolute;
-  inset: -4px;
+  inset: -2px;
   border-radius: 9999px;
-  background: radial-gradient(circle, rgba(37, 99, 235, 0.35), transparent 70%);
-  box-shadow: 0 0 14px rgba(37, 99, 235, 0.45);
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.18), transparent 70%);
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.28);
 }
