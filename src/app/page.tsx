@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import emailjs from '@emailjs/browser'
 import Image from 'next/image'
 import { FaLinkedin, FaGithub, FaLightbulb, FaTools, FaComments, FaClipboardList, FaUserFriends, FaBrain, FaWhatsapp, FaTimes, FaHtml5, FaCss3Alt, FaJs, FaReact, FaBootstrap, FaGitAlt, FaNodeJs, FaPython, FaDatabase, FaFire, FaTerminal, FaAws, FaEnvelope } from 'react-icons/fa'
 import { SiTypescript } from 'react-icons/si'
@@ -61,6 +62,13 @@ export default function Portfolio() {
    const [form, setForm] = useState({ name: '', email: '', message: '' })
    const [sending, setSending] = useState(false)
    const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' })
+
+  // EmailJS init (public key)
+  useEffect(() => {
+    try {
+      emailjs.init('Oy29Xjr_UT6c9xUho')
+    } catch {}
+  }, [])
 
   // Typewriter effect for hero section
   const [displayedText, setDisplayedText] = useState('')
@@ -1166,7 +1174,7 @@ export default function Portfolio() {
             
             <div className="space-y-6">
               <h3 className="text-2xl font-bold">{t('writeWhatYouNeed')}</h3>
-              <form className="space-y-4" onSubmit={async (e) => {
+              <form id="form" className="space-y-4" onSubmit={async (e) => {
                 e.preventDefault()
                 if (!form.name.trim() || !form.message.trim() || !form.email.trim()) {
                   setFeedback({ type: 'error', message: t('errorCompleteFields') })
@@ -1175,13 +1183,47 @@ export default function Portfolio() {
                 try {
                   setSending(true)
                   setFeedback({ type: null, message: '' })
-                  const res = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: form.name, email: form.email, message: form.message })
-                  })
-                  // Response body not needed; rely on status
-                  if (!res.ok) throw new Error(t('errorSending'))
+                  // Try EmailJS via sendForm (default_service/template_6iorr9e) as provided snippet
+                  let succeeded = false
+                  try {
+                    const resultForm = await emailjs.sendForm('default_service', 'template_6iorr9e', e.currentTarget as HTMLFormElement)
+                    if (resultForm && typeof (resultForm as any).status === 'number') {
+                      const st = (resultForm as any).status
+                      if (st >= 200 && st < 300) succeeded = true
+                    } else {
+                      // emailjs v3 may not return status; consider success if resolved
+                      succeeded = true
+                    }
+                  } catch {}
+                  // If sendForm not used or failed, try EmailJS .send with env-configured IDs
+                  if (!succeeded) {
+                    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+                    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+                    if (serviceId && templateId) {
+                      try {
+                        const result = await emailjs.send(serviceId, templateId, {
+                          name: form.name,
+                          email: form.email,
+                          message: form.message,
+                        })
+                        if (result && typeof (result as any).status === 'number') {
+                          const st = (result as any).status
+                          if (st >= 200 && st < 300) succeeded = true
+                        } else {
+                          succeeded = true
+                        }
+                      } catch {}
+                    }
+                  }
+                  // Fallback to existing API if EmailJS not configured or failed
+                  if (!succeeded) {
+                    const res = await fetch('/api/contact', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ name: form.name, email: form.email, message: form.message })
+                    })
+                    if (!res.ok) throw new Error(t('errorSending'))
+                  }
                   setFeedback({ type: 'success', message: t('successMessageSent') })
                   setForm({ name: '', email: '', message: '' })
                 } catch (err) {
@@ -1193,6 +1235,7 @@ export default function Portfolio() {
               }}>
                 <input
                   type="text"
+                  name="name"
                   placeholder={t('yourName')}
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
@@ -1200,6 +1243,7 @@ export default function Portfolio() {
                 />
                 <input
                   type="email"
+                  name="email"
                   placeholder={t('yourEmail')}
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
@@ -1208,12 +1252,19 @@ export default function Portfolio() {
                 <textarea
                   placeholder={t('yourMessage')}
                   rows={6}
+                  name="message"
                   value={form.message}
                   onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
                   className={`w-full backdrop-blur-sm border rounded-lg px-4 py-3 focus:outline-none transition-colors resize-none ${isDark ? 'bg-slate-800/30 border-slate-700 text-white placeholder-slate-500 focus:border-sky-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-600'}`}
                 />
+                {/* Campos ocultos para plantillas comunes de EmailJS */}
+                <input type="hidden" name="from_name" value={form.name} />
+                <input type="hidden" name="reply_to" value={form.email} />
+                <input type="hidden" name="user_name" value={form.name} />
+                <input type="hidden" name="user_email" value={form.email} />
                 <button
                   type="submit"
+                  id="button"
                   disabled={sending}
                   className={`group relative w-full px-6 py-4 rounded-xl font-semibold transition-all duration-500 transform hover:scale-105 hover:-translate-y-1 ripple overflow-hidden cursor-pointer ${isDark ? 'bg-gradient-to-r from-sky-400 to-blue-500 text-slate-950 hover:from-sky-500 hover:to-blue-600 shadow-lg shadow-sky-400/25 hover:shadow-sky-400/40' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40'} ${sending ? 'opacity-70 cursor-not-allowed scale-95' : 'hover:shadow-2xl'}`}
                 >
