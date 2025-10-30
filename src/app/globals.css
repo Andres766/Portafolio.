@@ -81,6 +81,9 @@ body {
   opacity: 0.12;
 }
 
+/* Subtle grid overlay inspired by minimalist portfolios */
+/* (reverted) removed grid overlay, vertical label and section divider */
+
 @keyframes drift {
   0% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(-5%, -5%) scale(1.05); }

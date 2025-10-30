@@ -128,6 +128,9 @@ export default function Portfolio() {
       myProjects: 'Mis proyectos',
       whatTheySayAboutMe: 'Lo que dicen de mí',
       testimonials: 'Testimonios'
+      ,navAchievements: 'Logros'
+      ,achievementsTitle: 'Logros y Reconocimientos'
+      ,achievementsIntro: 'Certificaciones, premios y métricas clave'
     },
     en: {
       greeting: 'Hi, my name is',
@@ -191,6 +194,9 @@ export default function Portfolio() {
       myProjects: 'My projects',
       whatTheySayAboutMe: 'What they say about me',
       testimonials: 'Testimonials'
+      ,navAchievements: 'Achievements'
+      ,achievementsTitle: 'Achievements & Recognition'
+      ,achievementsIntro: 'Certifications, awards, and key metrics'
     },
   }
 
@@ -259,7 +265,7 @@ export default function Portfolio() {
   // Detect active section on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'experience', 'services', 'projects', 'contact']
+      const sections = ['home', 'about', 'experience', 'services', 'projects', 'achievements', 'contact']
       const scrollPosition = window.scrollY + window.innerHeight / 2
 
       for (const section of sections) {
@@ -352,12 +358,21 @@ export default function Portfolio() {
     { title: 'Social Media API', tech: 'Node.js, PostgreSQL', description: { es: 'API REST para aplicación de redes sociales', en: 'REST API for a social media application' }, repo: '#', demo: '#' },
   ]
 
+  // Datos de logros
+  const achievements = [
+    { title: 'Certificación AWS Cloud Practitioner', date: '2024', detailEs: 'Fundamentos de nube y servicios AWS', detailEn: 'Cloud fundamentals and AWS services', icon: '📜' },
+    { title: 'Primer lugar Hackathon Universitaria', date: '2023', detailEs: 'App de análisis en tiempo real', detailEn: 'Real-time analytics app', icon: '🏆' },
+    { title: 'Proyecto OSS con 50+ estrellas', date: '2024', detailEs: 'Paquete npm con adopción temprana', detailEn: 'NPM package with early adoption', icon: '⭐' },
+    { title: '100+ Commits en 3 meses', date: '2024', detailEs: 'Constancia y buenas prácticas', detailEn: 'Consistency and best practices', icon: '📈' },
+  ]
+
   const navItems = [
     { id: 'home', label: t('navHome'), icon: <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" /> },
     { id: 'about', label: t('navAbout'), icon: <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /> },
     { id: 'experience', label: t('navExperience'), icon: <><path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" /></> },
     { id: 'services', label: t('navServices'), icon: <><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" /></> },
     { id: 'projects', label: t('navProjects'), icon: <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" /> },
+    { id: 'achievements', label: t('navAchievements'), icon: <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.955 4.15.006c.969.001 1.371 1.24.588 1.81l-3.357 2.44 1.276 3.985c.29.905-.755 1.65-1.538 1.09L10 13.347l-3.356 2.867c-.783.56-1.828-.185-1.539-1.09l1.276-3.985-3.357-2.44c-.783-.57-.38-1.809.588-1.81l4.15-.006 1.286-3.955z" /> },
     { id: 'contact', label: t('navContact'), icon: <><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></> },
   ]
 
@@ -500,7 +515,7 @@ export default function Portfolio() {
       {/* Language Toggle */}
       <button 
         onClick={() => setLang(lang === 'es' ? 'en' : 'es')}
-        className={`fixed top-8 left-8 z-50 px-3 py-2 rounded-lg transition duration-200 ease-in-out transform hover:scale-110 ${isDark ? 'text-slate-200 hover:text-white hover:bg-slate-800' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200'}`}
+        className={`fixed top-8 left-8 z-50 px-3 py-2 rounded-lg transition duration-200 ease-in-out transform hover:scale-110 cursor-pointer ${isDark ? 'text-slate-200 hover:text-white hover:bg-slate-800' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-200'}`}
         aria-label={t('changeLanguage')}
       >
         {lang === 'es' ? 'EN' : 'ES'}
@@ -509,7 +524,7 @@ export default function Portfolio() {
       {/* Theme Toggle */}
       <button 
         onClick={handleToggleTheme}
-        className={`fixed top-8 right-8 z-50 p-2 rounded-lg transition-all duration-150 ease-out transform hover:scale-110 ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
+        className={`fixed top-8 right-8 z-50 p-2 rounded-lg transition-all duration-150 ease-out transform hover:scale-110 cursor-pointer ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
       >
         {isDark ? (
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -522,8 +537,8 @@ export default function Portfolio() {
         )}
       </button>
 
-      {/* Hero Section with Enhanced Design */}
-      <section id="home" className="min-h-screen flex flex-col items-center justify-center px-4 py-20 relative overflow-hidden">
+      {/* Hero Section: split layout with photo ring */}
+      <section id="home" className="min-h-screen flex items-center px-4 py-28 relative overflow-hidden">
         {/* Floating Particles Background */}
         <div className="absolute inset-0 overflow-hidden">
           {particles.map((particle) => (
@@ -544,34 +559,30 @@ export default function Portfolio() {
 
         {/* Gradient Overlay */}
         <div className={`absolute inset-0 ${isDark ? 'bg-gradient-to-br from-slate-900/30 via-transparent to-slate-900/30' : 'bg-gradient-to-br from-white/30 via-transparent to-white/30'}`} />
-        
-        <div className="text-center space-y-8 max-w-4xl mx-auto relative z-10">
-          <div className="space-y-6">
-            <p className={`text-lg opacity-0 animate-fade-in-up ${isDark ? 'text-slate-400' : 'text-gray-600'}`} style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>{t('greeting')}</p>
-            
-            {/* Enhanced Name with Gradient Effect */}
-            <h1 className={`text-5xl md:text-7xl font-bold opacity-0 animate-fade-in-up bg-gradient-to-r ${isDark ? 'from-sky-400 via-blue-500 to-purple-600' : 'from-blue-600 via-purple-600 to-pink-600'} bg-clip-text text-transparent`} style={{animationDelay: '0.4s', animationFillMode: 'forwards'}}>
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-center space-y-6">
+            <p className={`${isDark ? 'text-slate-400' : 'text-gray-600'} text-base`}>{t('greeting')}</p>
+            <h1 className={`text-5xl md:text-7xl font-bold bg-gradient-to-r ${isDark ? 'from-sky-400 via-blue-500 to-purple-600' : 'from-blue-600 via-purple-600 to-pink-600'} bg-clip-text text-transparent`}>
               Andres Cordoba
             </h1>
-            
-            {/* Typewriter Effect for Role */}
-            <div className={`text-xl md:text-2xl h-8 flex items-center justify-center opacity-0 animate-fade-in-up ${isDark ? 'text-slate-300' : 'text-gray-700'}`} style={{animationDelay: '0.6s', animationFillMode: 'forwards'}}>
+            <div className={`text-xl md:text-2xl h-8 flex items-center justify-center ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
               <span className="font-mono">
                 {displayedText}
                 <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}>|</span>
               </span>
             </div>
           </div>
-          
+
           {/* Enhanced Buttons with Ripple Effect */}
           <div className="flex flex-wrap gap-4 justify-center mt-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.8s', animationFillMode: 'forwards'}}>
-            <button className={`group relative px-8 py-3 border-2 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl overflow-hidden ${isDark ? 'border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-slate-950' : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
+            <button className={`group relative px-8 py-3 border-2 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl overflow-hidden cursor-pointer ${isDark ? 'border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-slate-950' : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
               <span className="relative z-10">{t('downloadCv')}</span>
               <div className={`absolute inset-0 ${isDark ? 'bg-sky-400' : 'bg-blue-600'} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}></div>
             </button>
             <button 
               onClick={() => scrollToSection('about')}
-              className={`group relative px-8 py-3 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl overflow-hidden ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+              className={`group relative px-8 py-3 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl overflow-hidden cursor-pointer ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
             >
               <span className="relative z-10">{t('aboutMe')}</span>
               <div className={`absolute inset-0 ${isDark ? 'bg-sky-500' : 'bg-blue-700'} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-right`}></div>
@@ -591,7 +602,7 @@ export default function Portfolio() {
               />
             </div>
           </div>
-
+        
           {/* Scroll Indicator */}
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce opacity-0 animate-fade-in-up" style={{animationDelay: '1.2s', animationFillMode: 'forwards'}}>
             <div className={`w-6 h-10 border-2 rounded-full flex justify-center ${isDark ? 'border-sky-400' : 'border-blue-600'}`}>
@@ -611,7 +622,7 @@ export default function Portfolio() {
                 onClick={() => scrollToSection(item.id)}
                 onMouseEnter={() => setHoveredNav(item.id)}
                 onMouseLeave={() => setHoveredNav(null)}
-                className={`transition-all duration-300 transform hover:scale-125 hover:-translate-y-1 ${
+                className={`transition-all duration-300 transform hover:scale-125 hover:-translate-y-1 cursor-pointer ${
                   activeSection === item.id 
                     ? isDark ? 'text-sky-400' : 'text-blue-600'
                     : isDark ? 'text-slate-400 hover:text-sky-400' : 'text-gray-600 hover:text-blue-600'
@@ -633,6 +644,7 @@ export default function Portfolio() {
           ))}
         </nav>
       </section>
+
 
       {/* About Section */}
       <section id="about" className="min-h-screen flex items-center px-4 py-20">
@@ -671,6 +683,7 @@ export default function Portfolio() {
           </div>
         </div>
       </section>
+
 
       {/* Experience Section */}
       <section id="experience" className="min-h-screen flex items-center px-4 py-20">
@@ -731,7 +744,7 @@ export default function Portfolio() {
               
               <button 
                 onClick={() => scrollToSection('contact')}
-                className={`px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                className={`px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 cursor-pointer ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
               >
                 {t('contactMe')}
               </button>
@@ -739,6 +752,7 @@ export default function Portfolio() {
           </div>
         </div>
       </section>
+
 
       {/* Services Section */}
       <section id="services" className="min-h-screen flex items-center px-4 py-20">
@@ -751,7 +765,7 @@ export default function Portfolio() {
               <h3 className={`text-2xl font-bold mb-4 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('frontendDeveloper')}</h3>
               <button 
                 onClick={() => setServiceModal('frontend')}
-                className={`flex items-center justify-center gap-2 transition-colors mx-auto ${isDark ? 'text-sky-400 hover:text-sky-300' : 'text-blue-600 hover:text-blue-700'}`}
+                className={`flex items-center justify-center gap-2 transition-colors mx-auto cursor-pointer ${isDark ? 'text-sky-400 hover:text-sky-300' : 'text-blue-600 hover:text-blue-700'}`}
               >
                 Ver más
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -764,7 +778,7 @@ export default function Portfolio() {
               <h3 className={`text-2xl font-bold mb-4 text-center ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('backendDeveloper')}</h3>
               <button 
                 onClick={() => setServiceModal('backend')}
-                className={`flex items-center justify-center gap-2 transition-colors mx-auto ${isDark ? 'text-sky-400 hover:text-sky-300' : 'text-blue-600 hover:text-blue-700'}`}
+                className={`flex items-center justify-center gap-2 transition-colors mx-auto cursor-pointer ${isDark ? 'text-sky-400 hover:text-sky-300' : 'text-blue-600 hover:text-blue-700'}`}
               >
                 Ver más
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -776,6 +790,7 @@ export default function Portfolio() {
         </div>
       </section>
 
+
       {/* Enhanced Projects Section */}
       <section id="projects" className="min-h-screen flex items-center px-4 py-20">
         <div className="max-w-6xl mx-auto w-full">
@@ -784,7 +799,7 @@ export default function Portfolio() {
             <h2 className={`text-4xl md:text-5xl font-bold bg-gradient-to-r ${isDark ? 'from-sky-400 via-blue-500 to-purple-600' : 'from-blue-600 via-purple-600 to-pink-600'} bg-clip-text text-transparent`}>{t('myProjects')}</h2>
           </div>
           
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 auto-rows-fr gap-8">
             {projects.map((project, i) => (
               <div 
                 key={i} 
@@ -793,7 +808,7 @@ export default function Portfolio() {
                 onClick={() => setProjectModal(i)}
               >
                 {/* Project Image with Overlay */}
-                <div className="aspect-video relative overflow-hidden">
+                <div className={`aspect-video relative overflow-hidden`}>
                   {project.image ? (
                     <Image 
                       src={project.image} 
@@ -861,6 +876,41 @@ export default function Portfolio() {
         </div>
       </section>
 
+      {/* Achievements Section */}
+      <section id="achievements" className="min-h-screen flex items-center px-4 py-20">
+        <div className="max-w-6xl mx-auto w-full">
+          <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('achievementsIntro')}</p>
+          <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('achievementsTitle')}</h2>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {achievements.map((item, i) => (
+              <div
+                key={i}
+                className={`backdrop-blur-sm rounded-2xl p-6 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 ${isDark ? 'bg-slate-800/30 hover:bg-slate-800/50 border border-slate-700/40' : 'bg-white/80 hover:bg-white shadow-lg hover:shadow-xl border border-gray-200/50'}`}
+                style={{animationDelay: `${0.2 + i * 0.1}s`, animationFillMode: 'forwards'}}
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
+                    {item.icon}
+                  </div>
+                  <div>
+                    <h3 className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.title}</h3>
+                    <p className={`text-sm ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{item.date}</p>
+                  </div>
+                </div>
+                <p className={`${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
+                  {lang === 'es' ? item.detailEs : item.detailEn}
+                </p>
+
+                <div className={`mt-4 h-1 rounded-full overflow-hidden ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
+                  <div className={`h-full bg-gradient-to-r ${isDark ? 'from-sky-400 to-blue-500' : 'from-blue-500 to-purple-600'} transform scale-x-0 hover:scale-x-100 transition-transform duration-700 origin-left`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
       <section id="testimonials" className="min-h-screen flex items-center px-4 py-20">
         <div className="max-w-6xl mx-auto w-full">
@@ -885,6 +935,7 @@ export default function Portfolio() {
           </div>
         </div>
       </section>
+
 
       {/* Contact Section */}
       <section id="contact" className="min-h-screen flex items-center px-4 py-20 pb-32">
@@ -994,7 +1045,7 @@ export default function Portfolio() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className={`group relative w-full px-6 py-4 rounded-xl font-semibold transition-all duration-500 transform hover:scale-105 hover:-translate-y-1 ripple overflow-hidden ${isDark ? 'bg-gradient-to-r from-sky-400 to-blue-500 text-slate-950 hover:from-sky-500 hover:to-blue-600 shadow-lg shadow-sky-400/25 hover:shadow-sky-400/40' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40'} ${sending ? 'opacity-70 cursor-not-allowed scale-95' : 'hover:shadow-2xl'}`}
+                  className={`group relative w-full px-6 py-4 rounded-xl font-semibold transition-all duration-500 transform hover:scale-105 hover:-translate-y-1 ripple overflow-hidden cursor-pointer ${isDark ? 'bg-gradient-to-r from-sky-400 to-blue-500 text-slate-950 hover:from-sky-500 hover:to-blue-600 shadow-lg shadow-sky-400/25 hover:shadow-sky-400/40' : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40'} ${sending ? 'opacity-70 cursor-not-allowed scale-95' : 'hover:shadow-2xl'}`}
                 >
                   <span className={`flex items-center justify-center gap-2 transition-all duration-300 ${sending ? 'opacity-0' : 'opacity-100'}`}>
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1038,7 +1089,7 @@ export default function Portfolio() {
           <div className={`max-w-2xl w-full rounded-2xl p-8 relative animate-scale-in ${isDark ? 'bg-slate-900' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
             <button 
               onClick={() => setServiceModal(null)}
-              className={`absolute top-4 right-4 p-2 rounded-lg transition-all duration-300 transform hover:scale-110 hover:rotate-90 ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
+              className={`absolute top-4 right-4 p-2 rounded-lg transition-all duration-300 transform hover:scale-110 hover:rotate-90 cursor-pointer ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
             >
               <FaTimes size={24} />
             </button>
@@ -1076,7 +1127,7 @@ export default function Portfolio() {
           <div className={`max-w-3xl w-full rounded-2xl overflow-hidden relative animate-scale-in ${isDark ? 'bg-slate-900' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
             <button 
               onClick={() => setProjectModal(null)}
-              className={`absolute top-4 right-4 p-2 rounded-lg transition-all duration-300 transform hover:scale-110 hover:rotate-90 z-10 ${isDark ? 'text-white bg-slate-800/80 hover:bg-slate-700' : 'text-gray-900 bg-white/80 hover:bg-gray-100'}`}
+              className={`absolute top-4 right-4 p-2 rounded-lg transition-all duration-300 transform hover:scale-110 hover:rotate-90 z-10 cursor-pointer ${isDark ? 'text-white bg-slate-800/80 hover:bg-slate-700' : 'text-gray-900 bg-white/80 hover:bg-gray-100'}`}
             >
               <FaTimes size={24} />
             </button>
