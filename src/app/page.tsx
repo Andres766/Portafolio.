@@ -1,9 +1,15 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { FaLinkedin, FaGithub, FaLightbulb, FaTools, FaComments, FaClipboardList, FaUserFriends, FaBrain, FaWhatsapp, FaTimes, FaHtml5, FaCss3Alt, FaJs, FaReact, FaBootstrap, FaGitAlt, FaNodeJs, FaPython, FaDatabase, FaFire, FaTerminal, FaAws, FaEnvelope } from 'react-icons/fa'
 import { SiTypescript } from 'react-icons/si'
+
+type CSSVars = React.CSSProperties & {
+  ['--mx']?: string
+  ['--my']?: string
+  ['--spd']?: string
+}
 
 export default function Portfolio() {
   const [isDark, setIsDark] = useState(true)
@@ -221,7 +227,7 @@ export default function Portfolio() {
     },
   }
 
-  const t = (key: string) => translations[lang][key] ?? key
+  const t = useCallback((key: string) => translations[lang][key] ?? key, [lang])
 
   // Typewriter effect for hero section (now that 't' is defined)
   useEffect(() => {
@@ -648,15 +654,15 @@ export default function Portfolio() {
             >
               <div className={`absolute inset-0 rounded-full ${isDark ? 'bg-gradient-to-br from-sky-400/20 to-purple-600/20' : 'bg-gradient-to-br from-blue-600/20 to-pink-600/20'} animate-pulse`}></div>
               {/* Sparkles */}
-              <div className={`absolute sparkle ${isDark ? 'bg-sky-400' : 'bg-blue-600'}`} style={{ top: '8%', left: '25%', ['--spd' as any]: '2.4s', pointerEvents: 'none' }}></div>
-              <div className={`absolute sparkle ${isDark ? 'bg-purple-500' : 'bg-pink-600'}`} style={{ top: '22%', left: '78%', ['--spd' as any]: '3s', pointerEvents: 'none' }}></div>
-              <div className={`absolute sparkle ${isDark ? 'bg-cyan-400' : 'bg-indigo-500'}`} style={{ top: '70%', left: '18%', ['--spd' as any]: '2.2s', pointerEvents: 'none' }}></div>
-              <div className={`absolute sparkle ${isDark ? 'bg-sky-300' : 'bg-blue-500'}`} style={{ top: '82%', left: '62%', ['--spd' as any]: '2.8s', pointerEvents: 'none' }}></div>
-              <div className={`absolute sparkle ${isDark ? 'bg-violet-500' : 'bg-purple-600'}`} style={{ top: '40%', left: '6%', ['--spd' as any]: '3.2s', pointerEvents: 'none' }}></div>
-              <div className={`absolute sparkle ${isDark ? 'bg-emerald-400' : 'bg-green-500'}`} style={{ top: '14%', left: '50%', ['--spd' as any]: '2.6s', pointerEvents: 'none' }}></div>
+              <div className={`absolute sparkle ${isDark ? 'bg-sky-400' : 'bg-blue-600'}`} style={{ top: '8%', left: '25%', '--spd': '2.4s', pointerEvents: 'none' } as CSSVars}></div>
+              <div className={`absolute sparkle ${isDark ? 'bg-purple-500' : 'bg-pink-600'}`} style={{ top: '22%', left: '78%', '--spd': '3s', pointerEvents: 'none' } as CSSVars}></div>
+              <div className={`absolute sparkle ${isDark ? 'bg-cyan-400' : 'bg-indigo-500'}`} style={{ top: '70%', left: '18%', '--spd': '2.2s', pointerEvents: 'none' } as CSSVars}></div>
+              <div className={`absolute sparkle ${isDark ? 'bg-sky-300' : 'bg-blue-500'}`} style={{ top: '82%', left: '62%', '--spd': '2.8s', pointerEvents: 'none' } as CSSVars}></div>
+              <div className={`absolute sparkle ${isDark ? 'bg-violet-500' : 'bg-purple-600'}`} style={{ top: '40%', left: '6%', '--spd': '3.2s', pointerEvents: 'none' } as CSSVars}></div>
+              <div className={`absolute sparkle ${isDark ? 'bg-emerald-400' : 'bg-green-500'}`} style={{ top: '14%', left: '50%', '--spd': '2.6s', pointerEvents: 'none' } as CSSVars}></div>
               <div
                 className="absolute inset-0 rounded-full glare"
-                style={{ ['--mx' as any]: `${glarePos.x}%`, ['--my' as any]: `${glarePos.y}%` }}
+                style={{ '--mx': `${glarePos.x}%`, '--my': `${glarePos.y}%` } as CSSVars}
               />
               <Image 
                 src="/Andres.jpg" 
@@ -1076,7 +1082,7 @@ export default function Portfolio() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name: form.name, email: form.email, message: form.message })
                   })
-                  const data = await res.json()
+                  // Response body not needed; rely on status
                   if (!res.ok) throw new Error(t('errorSending'))
                   setFeedback({ type: 'success', message: t('successMessageSent') })
                   setForm({ name: '', email: '', message: '' })
