@@ -257,7 +257,7 @@ html {
 
 .animated-gradient-text {
   background-size: 200% 200%;
-  animation: moveGradient 6s ease-in-out infinite;
+  animation: moveGradient 4s ease-in-out infinite;
 }
 
 
