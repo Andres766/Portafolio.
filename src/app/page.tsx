@@ -951,6 +951,36 @@ export default function Portfolio() {
                   <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>
                     {project.description[lang]}
                   </p>
+
+                  {/* Badges: Código & Live demo */}
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {project.repo && project.repo !== '#' && (
+                      <a
+                        href={project.repo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`badge ${isDark ? 'bg-slate-800/70 text-sky-400 hover:bg-slate-800/85' : 'bg-white/90 text-blue-700 hover:bg-white'} shadow-sm hover:shadow-md`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <FaGithub size={14} className="badge-icon" />
+                        <span>{lang === 'es' ? 'Código' : 'Code'}</span>
+                      </a>
+                    )}
+                    {project.demo && project.demo !== '#' && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`badge ${isDark ? 'bg-sky-400/85 text-slate-950 hover:bg-sky-400' : 'bg-blue-600 text-white hover:bg-blue-700'} shadow-sm hover:shadow-md`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                        <span>{lang === 'es' ? 'Live demo' : 'Live demo'}</span>
+                      </a>
+                    )}
+                  </div>
                   
                   {/* Progress Bar Animation */}
                   <div className={`mt-4 h-1 rounded-full overflow-hidden ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>

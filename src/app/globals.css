@@ -196,6 +196,33 @@ body {
 .animate-slide-in-right { animation: slide-in-right 0.8s ease-out forwards; }
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 
+/* Badge hover vibration */
+@keyframes vibrate {
+  0% { transform: translate3d(0,0,0) rotate(0deg); }
+  20% { transform: translate3d(0.8px,-0.6px,0) rotate(0.2deg); }
+  40% { transform: translate3d(-0.6px,0.8px,0) rotate(-0.2deg); }
+  60% { transform: translate3d(0.6px,-0.8px,0) rotate(0.2deg); }
+  80% { transform: translate3d(-0.8px,0.6px,0) rotate(-0.2deg); }
+  100% { transform: translate3d(0,0,0) rotate(0deg); }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease, color 150ms ease;
+  will-change: transform;
+}
+.badge:hover {
+  animation: vibrate 0.35s linear infinite;
+}
+.badge-icon { display: inline-block; }
+
 /* Ripple effect */
 .ripple {
   position: relative;
