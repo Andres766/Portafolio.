@@ -1186,14 +1186,9 @@ export default function Portfolio() {
                   // Try EmailJS via sendForm (default_service/template_6iorr9e) as provided snippet
                   let succeeded = false
                   try {
-                    const resultForm = await emailjs.sendForm('default_service', 'template_6iorr9e', e.currentTarget as HTMLFormElement)
-                    if (resultForm && typeof (resultForm as any).status === 'number') {
-                      const st = (resultForm as any).status
-                      if (st >= 200 && st < 300) succeeded = true
-                    } else {
-                      // emailjs v3 may not return status; consider success if resolved
-                      succeeded = true
-                    }
+                    await emailjs.sendForm('default_service', 'template_6iorr9e', e.currentTarget as HTMLFormElement)
+                    // sendForm resolves on success; treat as succeeded
+                    succeeded = true
                   } catch {}
                   // If sendForm not used or failed, try EmailJS .send with env-configured IDs
                   if (!succeeded) {
@@ -1201,17 +1196,13 @@ export default function Portfolio() {
                     const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
                     if (serviceId && templateId) {
                       try {
-                        const result = await emailjs.send(serviceId, templateId, {
+                        await emailjs.send(serviceId, templateId, {
                           name: form.name,
                           email: form.email,
                           message: form.message,
                         })
-                        if (result && typeof (result as any).status === 'number') {
-                          const st = (result as any).status
-                          if (st >= 200 && st < 300) succeeded = true
-                        } else {
-                          succeeded = true
-                        }
+                        // send resolves on success
+                        succeeded = true
                       } catch {}
                     }
                   }
