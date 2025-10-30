@@ -276,6 +276,49 @@ html {
   mix-blend-mode: screen;
 }
 
+/* Shine sweep over text on hover */
+@keyframes sweep {
+  0% { transform: translateX(-120%); opacity: 0.0; }
+  20% { opacity: 0.6; }
+  50% { transform: translateX(0%); opacity: 0.9; }
+  80% { opacity: 0.6; }
+  100% { transform: translateX(120%); opacity: 0.0; }
+}
+
+.shine-on-hover {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.shine-on-hover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.9) 50%, transparent 70%);
+  mix-blend-mode: screen;
+  transform: translateX(-120%);
+}
+
+.shine-on-hover:hover::after {
+  animation: sweep 1.2s ease-in-out;
+}
+
+/* Sparkle twinkle for small decorative particles */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; transform: translateY(0) scale(1); }
+  50% { opacity: 0.9; transform: translateY(-2px) scale(1.1); }
+}
+
+.sparkle {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: twinkle var(--spd, 2.4s) ease-in-out infinite;
+}
+
 
 /* Floating background icons */
 .floating-icons {

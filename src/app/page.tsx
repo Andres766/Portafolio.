@@ -431,7 +431,7 @@ export default function Portfolio() {
         </div>
         
         {/* Name */}
-        <h1 className="mt-16 text-4xl md:text-5xl font-bold animate-fade-in">
+        <h1 className="mt-16 text-4xl md:text-5xl font-bold animate-fade-in shine-on-hover">
           {"Andres Cordoba".split("").map((ch, i) => (
             ch === " " ? (
               <span key={i} className="inline-block">&nbsp;</span>
@@ -596,7 +596,7 @@ export default function Portfolio() {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center space-y-6">
             <p className={`${isDark ? 'text-slate-400' : 'text-gray-600'} text-base`}>{t('greeting')}</p>
-            <h1 className={`text-5xl md:text-7xl font-bold`}>
+            <h1 className={`text-5xl md:text-7xl font-bold shine-on-hover`}>
               {"Andres Cordoba".split("").map((ch, i) => (
                 ch === " " ? (
                   <span key={i} className="inline-block">&nbsp;</span>
@@ -640,13 +640,20 @@ export default function Portfolio() {
               ref={photoRef}
               onMouseMove={handlePhotoMouseMove}
               onMouseLeave={handlePhotoMouseLeave}
-              className={`w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-4 relative tilt-3d transform-gpu ${isDark ? 'border-slate-700' : 'border-gray-300'}`}
+              className={`w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-4 relative tilt-3d transform-gpu shadow-xl ${isDark ? 'border-slate-700' : 'border-gray-300'}`}
               style={{
                 transform: `perspective(900px) rotateX(${photoTilt.rx}deg) rotateY(${photoTilt.ry}deg) scale(${photoTilt.scale})`,
                 transition: 'transform 180ms ease-out'
               }}
             >
               <div className={`absolute inset-0 rounded-full ${isDark ? 'bg-gradient-to-br from-sky-400/20 to-purple-600/20' : 'bg-gradient-to-br from-blue-600/20 to-pink-600/20'} animate-pulse`}></div>
+              {/* Sparkles */}
+              <div className={`absolute sparkle ${isDark ? 'bg-sky-400' : 'bg-blue-600'}`} style={{ top: '8%', left: '25%', ['--spd' as any]: '2.4s', pointerEvents: 'none' }}></div>
+              <div className={`absolute sparkle ${isDark ? 'bg-purple-500' : 'bg-pink-600'}`} style={{ top: '22%', left: '78%', ['--spd' as any]: '3s', pointerEvents: 'none' }}></div>
+              <div className={`absolute sparkle ${isDark ? 'bg-cyan-400' : 'bg-indigo-500'}`} style={{ top: '70%', left: '18%', ['--spd' as any]: '2.2s', pointerEvents: 'none' }}></div>
+              <div className={`absolute sparkle ${isDark ? 'bg-sky-300' : 'bg-blue-500'}`} style={{ top: '82%', left: '62%', ['--spd' as any]: '2.8s', pointerEvents: 'none' }}></div>
+              <div className={`absolute sparkle ${isDark ? 'bg-violet-500' : 'bg-purple-600'}`} style={{ top: '40%', left: '6%', ['--spd' as any]: '3.2s', pointerEvents: 'none' }}></div>
+              <div className={`absolute sparkle ${isDark ? 'bg-emerald-400' : 'bg-green-500'}`} style={{ top: '14%', left: '50%', ['--spd' as any]: '2.6s', pointerEvents: 'none' }}></div>
               <div
                 className="absolute inset-0 rounded-full glare"
                 style={{ ['--mx' as any]: `${glarePos.x}%`, ['--my' as any]: `${glarePos.y}%` }}
