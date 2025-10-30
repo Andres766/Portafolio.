@@ -41,7 +41,6 @@ export default function Portfolio() {
 
   // (moved typewriter and reset effects below after 'lang' and 't' are defined)
 
-  // Cursor blinking effect
   useEffect(() => {
     const interval = setInterval(() => {
       setShowCursor(prev => !prev)
