@@ -260,6 +260,22 @@ html {
   animation: moveGradient 4s ease-in-out infinite;
 }
 
+/* 3D tilt support and interactive glare */
+.tilt-3d {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.glare {
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.18),
+    transparent 60%
+  );
+  mix-blend-mode: screen;
+}
+
 
 /* Floating background icons */
 .floating-icons {

@@ -15,6 +15,7 @@ export default function Portfolio() {
   const [hoveredNav, setHoveredNav] = useState<string | null>(null)
    const iconsRef = useRef<HTMLDivElement>(null)
    const footerRef = useRef<HTMLElement | null>(null)
+   const photoRef = useRef<HTMLDivElement>(null)
    const [form, setForm] = useState({ name: '', email: '', message: '' })
    const [sending, setSending] = useState(false)
    const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' })
@@ -23,6 +24,27 @@ export default function Portfolio() {
   const [displayedText, setDisplayedText] = useState('')
   const [currentIndex, setCurrentIndex] = useState(0)
   const [showCursor, setShowCursor] = useState(true)
+
+  // 3D tilt state for hero photo
+  const [photoTilt, setPhotoTilt] = useState<{ rx: number; ry: number; scale: number }>({ rx: 0, ry: 0, scale: 1 })
+  const [glarePos, setGlarePos] = useState<{ x: number; y: number }>({ x: 50, y: 50 })
+
+  const handlePhotoMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const px = (x / rect.width) * 100
+    const py = (y / rect.height) * 100
+    const max = 12
+    const ry = ((x - rect.width / 2) / rect.width) * (max * 2)
+    const rx = -((y - rect.height / 2) / rect.height) * (max * 2)
+    setPhotoTilt({ rx, ry, scale: 1.06 })
+    setGlarePos({ x: px, y: py })
+  }
+
+  const handlePhotoMouseLeave = () => {
+    setPhotoTilt({ rx: 0, ry: 0, scale: 1 })
+  }
 
   // Floating particles for background
   const [particles, setParticles] = useState<Array<{id: number, x: number, y: number, size: number, opacity: number, speed: number}>>([])
@@ -612,16 +634,30 @@ export default function Portfolio() {
             </button>
           </div>
 
-          {/* Enhanced Profile Image with Glow Effect */}
+          {/* Enhanced Profile Image with 3D Tilt & Glare */}
           <div className="mt-12 opacity-0 animate-fade-in-up" style={{animationDelay: '1s', animationFillMode: 'forwards'}}>
-            <div className={`w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-4 relative ${isDark ? 'border-slate-700' : 'border-gray-300'}`}>
+            <div
+              ref={photoRef}
+              onMouseMove={handlePhotoMouseMove}
+              onMouseLeave={handlePhotoMouseLeave}
+              className={`w-64 h-64 md:w-80 md:h-80 mx-auto rounded-full overflow-hidden border-4 relative tilt-3d transform-gpu ${isDark ? 'border-slate-700' : 'border-gray-300'}`}
+              style={{
+                transform: `perspective(900px) rotateX(${photoTilt.rx}deg) rotateY(${photoTilt.ry}deg) scale(${photoTilt.scale})`,
+                transition: 'transform 180ms ease-out'
+              }}
+            >
               <div className={`absolute inset-0 rounded-full ${isDark ? 'bg-gradient-to-br from-sky-400/20 to-purple-600/20' : 'bg-gradient-to-br from-blue-600/20 to-pink-600/20'} animate-pulse`}></div>
+              <div
+                className="absolute inset-0 rounded-full glare"
+                style={{ ['--mx' as any]: `${glarePos.x}%`, ['--my' as any]: `${glarePos.y}%` }}
+              />
               <Image 
                 src="/Andres.jpg" 
                 alt="Andres Cordoba" 
                 width={320} 
                 height={320} 
-                className="w-full h-full object-cover relative z-10 transition-transform duration-300 hover:scale-110"
+                className="w-full h-full object-cover relative z-10"
+                style={{ transform: 'translateZ(30px)' }}
               />
             </div>
           </div>
