@@ -407,7 +407,7 @@ export default function Portfolio() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  // Loading Screen Component
+  // 
   if (loading) {
     return (
       <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
