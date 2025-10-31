@@ -66,7 +66,7 @@ export default function Portfolio() {
   // EmailJS init (public key)
   useEffect(() => {
     try {
-      emailjs.init('Oy29Xjr_UT6c9xUho')
+      emailjs.init('GA1MNMcBlMAqcBqvv')
     } catch {}
   }, [])
 
@@ -1186,9 +1186,14 @@ export default function Portfolio() {
                   // Try EmailJS via sendForm (default_service/template_6iorr9e) as provided snippet
                   let succeeded = false
                   try {
-                    await emailjs.sendForm('default_service', 'template_6iorr9e', e.currentTarget as HTMLFormElement)
-                    // sendForm resolves on success; treat as succeeded
-                    succeeded = true
+                    const resultForm = await emailjs.sendForm('default_service', 'template_dx4icrp', e.currentTarget as HTMLFormElement)
+                    if (resultForm && typeof (resultForm as any).status === 'number') {
+                      const st = (resultForm as any).status
+                      if (st >= 200 && st < 300) succeeded = true
+                    } else {
+                      // emailjs v3 may not return status; consider success if resolved
+                      succeeded = true
+                    }
                   } catch {}
                   // If sendForm not used or failed, try EmailJS .send with env-configured IDs
                   if (!succeeded) {
@@ -1196,13 +1201,17 @@ export default function Portfolio() {
                     const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
                     if (serviceId && templateId) {
                       try {
-                        await emailjs.send(serviceId, templateId, {
+                        const result = await emailjs.send(serviceId, templateId, {
                           name: form.name,
                           email: form.email,
                           message: form.message,
                         })
-                        // send resolves on success
-                        succeeded = true
+                        if (result && typeof (result as any).status === 'number') {
+                          const st = (result as any).status
+                          if (st >= 200 && st < 300) succeeded = true
+                        } else {
+                          succeeded = true
+                        }
                       } catch {}
                     }
                   }
@@ -1227,6 +1236,7 @@ export default function Portfolio() {
                 <input
                   type="text"
                   name="name"
+                  id="name"
                   placeholder={t('yourName')}
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
@@ -1235,6 +1245,7 @@ export default function Portfolio() {
                 <input
                   type="email"
                   name="email"
+                  id="email"
                   placeholder={t('yourEmail')}
                   value={form.email}
                   onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
@@ -1244,15 +1255,17 @@ export default function Portfolio() {
                   placeholder={t('yourMessage')}
                   rows={6}
                   name="message"
+                  id="message"
                   value={form.message}
                   onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
                   className={`w-full backdrop-blur-sm border rounded-lg px-4 py-3 focus:outline-none transition-colors resize-none ${isDark ? 'bg-slate-800/30 border-slate-700 text-white placeholder-slate-500 focus:border-sky-400' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-blue-600'}`}
                 />
-                {/* Campos ocultos para plantillas comunes de EmailJS */}
+                {/* Campos ocultos para compatibilidad con plantillas comunes de EmailJS */}
                 <input type="hidden" name="from_name" value={form.name} />
-                <input type="hidden" name="reply_to" value={form.email} />
                 <input type="hidden" name="user_name" value={form.name} />
+                <input type="hidden" name="reply_to" value={form.email} />
                 <input type="hidden" name="user_email" value={form.email} />
+                <input type="hidden" name="to_name" value="Andres Cordoba" />
                 <button
                   type="submit"
                   id="button"
