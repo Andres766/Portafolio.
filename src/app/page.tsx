@@ -809,7 +809,7 @@ export default function Portfolio() {
 
 
       {/* About Section */}
-      <section id="about" className="min-h-screen flex items-center px-4 py-20">
+      <section id="about" className="flex items-center px-4 py-28">
         <div className="max-w-6xl mx-auto w-full">
           <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('mySkills')}</p>
           <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('myExperience')}</h2>
@@ -848,7 +848,7 @@ export default function Portfolio() {
 
 
       {/* Experience Section */}
-      <section id="experience" className="min-h-screen flex items-center px-4 py-20">
+      <section id="experience" className="flex items-center px-4 py-28">
         <div className="max-w-6xl mx-auto w-full">
           <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('myJourney')}</p>
           <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('experienceTitle')}</h2>
@@ -917,7 +917,7 @@ export default function Portfolio() {
 
 
       {/* Services Section */}
-      <section id="services" className="min-h-screen flex items-center px-4 py-20">
+      <section id="services" className="flex items-center px-4 py-28">
         <div className="max-w-6xl mx-auto w-full">
           <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('myServices')}</p>
           <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('whatIOffer')}</h2>
@@ -954,7 +954,7 @@ export default function Portfolio() {
 
 
       {/* Enhanced Projects Section */}
-      <section id="projects" className="min-h-screen flex items-center px-4 py-20">
+      <section id="projects" className="flex items-center px-4 py-28">
         <div className="max-w-6xl mx-auto w-full">
           <div className="text-center mb-16 opacity-0 animate-fade-in-up" style={{animationDelay: '0.2s', animationFillMode: 'forwards'}}>
             <p className={`mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('portfolio')}</p>
@@ -1069,7 +1069,7 @@ export default function Portfolio() {
       </section>
 
       {/* Achievements Section */}
-      <section id="achievements" className="min-h-screen flex items-center px-4 py-20">
+      <section id="achievements" className="flex items-center px-4 py-28">
         <div className="max-w-6xl mx-auto w-full">
           <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('achievementsIntro')}</p>
           <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('achievementsTitle')}</h2>
@@ -1104,7 +1104,7 @@ export default function Portfolio() {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="min-h-screen flex items-center px-4 py-20">
+      <section id="testimonials" className="flex items-center px-4 py-28">
         <div className="max-w-6xl mx-auto w-full">
           <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('whatTheySayAboutMe')}</p>
           <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('testimonials')}</h2>
@@ -1130,7 +1130,7 @@ export default function Portfolio() {
 
 
       {/* Contact Section */}
-      <section id="contact" className="min-h-screen flex items-center px-4 py-20 pb-32">
+      <section id="contact" className="flex items-center px-4 py-28 pb-32">
         <div className="max-w-6xl mx-auto w-full">
           <p className={`text-center mb-2 ${isDark ? 'text-slate-400' : 'text-gray-600'}`}>{t('getInTouch')}</p>
           <h2 className={`text-4xl md:text-5xl font-bold text-center mb-16 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>{t('contactTitle')}</h2>
