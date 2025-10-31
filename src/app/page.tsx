@@ -709,7 +709,21 @@ export default function Portfolio() {
 
           {/* Enhanced Buttons with Ripple Effect */}
           <div className="flex flex-wrap gap-4 justify-center mt-8 opacity-0 animate-fade-in-up" style={{animationDelay: '0.8s', animationFillMode: 'forwards'}}>
-            <button className={`group relative px-8 py-3 border-2 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl overflow-hidden cursor-pointer ${isDark ? 'border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-slate-950' : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
+            <button
+              onClick={() => {
+                try {
+                  const link = document.createElement('a')
+                  link.href = '/CV%20Andres%20Cordoba.pdf'
+                  link.download = 'CV Andres Cordoba.pdf'
+                  document.body.appendChild(link)
+                  link.click()
+                  document.body.removeChild(link)
+                } catch {
+                  window.open('/CV%20Andres%20Cordoba.pdf', '_blank')
+                }
+              }}
+              className={`group relative px-8 py-3 border-2 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl overflow-hidden cursor-pointer ${isDark ? 'border-sky-400 text-sky-400 hover:bg-sky-400 hover:text-slate-950' : 'border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`}
+            >
               <span className="relative z-10">{t('downloadCv')}</span>
               <div className={`absolute inset-0 ${isDark ? 'bg-sky-400' : 'bg-blue-600'} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left`}></div>
             </button>
