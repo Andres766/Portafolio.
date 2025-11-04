@@ -26,9 +26,11 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   const themeCookie = cookieStore.get("theme")?.value;
+  const langCookie = cookieStore.get("lang")?.value;
   const initialThemeClass = themeCookie === "light" ? "light" : "dark";
+  const initialLang = langCookie === "en" ? "en" : "es";
   return (
-    <html lang="es" className={initialThemeClass}>
+    <html lang={initialLang} className={initialThemeClass}>
       <head>
         <Script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" strategy="beforeInteractive" />
         <Script id="emailjs-init" strategy="afterInteractive">
