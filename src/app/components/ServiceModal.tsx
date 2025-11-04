@@ -45,8 +45,8 @@ export default function ServiceModal({
   if (!serviceModal) return null
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in overflow-hidden" onClick={() => setServiceModal(null)}>
-      <div className={`max-w-4xl w-full rounded-2xl p-6 relative animate-scale-in ${isDark ? 'bg-slate-900' : 'bg-white'}`} onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in overflow-y-auto" onClick={() => setServiceModal(null)}>
+      <div className={`max-w-4xl w-full rounded-2xl p-4 md:p-6 relative animate-scale-in ${isDark ? 'bg-slate-900' : 'bg-white'} max-h-[85vh] overflow-y-auto`} onClick={(e) => e.stopPropagation()}>
         <button 
           onClick={() => setServiceModal(null)}
           className={`absolute top-4 right-4 p-2 rounded-lg transition-all duration-300 transform hover:scale-110 hover:rotate-90 cursor-pointer ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
@@ -55,8 +55,8 @@ export default function ServiceModal({
         </button>
         
         <div className="text-center mb-5">
-          <div className="text-5xl mb-2">{services[serviceModal].image}</div>
-          <h3 className={`text-3xl font-bold mb-1 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>
+          <div className="text-4xl md:text-5xl mb-2">{services[serviceModal].image}</div>
+          <h3 className={`text-2xl md:text-3xl font-bold mb-1 ${isDark ? 'text-sky-300' : 'text-blue-600'}`}>
             {t(services[serviceModal].titleKey)}
           </h3>
           <p className={`mb-3 text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
@@ -68,7 +68,7 @@ export default function ServiceModal({
           </div>
         </div>
 
-        <div className="grid md:grid-cols-12 gap-8">
+        <div className="grid md:grid-cols-12 gap-6 md:gap-8">
           <div className="space-y-6 md:col-span-7">
             {/* Incluye en chips horizontales */}
             {services[serviceModal].includes && services[serviceModal].includes!.length > 0 && (
@@ -102,11 +102,11 @@ export default function ServiceModal({
           </div>
 
           <div className="space-y-5 md:col-span-5">
-            {/* Proceso de trabajo como timeline horizontal */}
+            {/* Proceso de trabajo como timeline responsivo */}
             {services[serviceModal].process && services[serviceModal].process!.length > 0 && (
               <div>
                 <h4 className={`font-bold text-lg mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Proceso de trabajo</h4>
-                <div className="grid grid-cols-3 gap-5">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
                   {services[serviceModal].process!.map((step, idx) => (
                     <div key={`${step}-${idx}`} className="flex flex-col items-center text-center">
                       <span className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold ${isDark ? 'bg-sky-900/40 text-sky-300 border border-sky-700/40' : 'bg-blue-50 text-blue-700 border border-blue-200'}`}>{idx + 1}</span>
