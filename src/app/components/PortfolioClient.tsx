@@ -37,7 +37,7 @@ export default function PortfolioClient({ initialTheme, initialLang }: { initial
   // Keep loader consistent with initial theme to avoid flash
   const [loaderTheme, setLoaderTheme] = useState<'dark' | 'light'>(initialTheme)
 
-  const [serviceModal, setServiceModal] = useState<'frontend' | 'backend' | null>(null)
+  const [serviceModal, setServiceModal] = useState<'frontend' | 'backend' | 'uiux' | 'devops' | null>(null)
   const [projectModal, setProjectModal] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [hoveredNav, setHoveredNav] = useState<string | null>(null)
