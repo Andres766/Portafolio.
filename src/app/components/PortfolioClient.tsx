@@ -15,6 +15,7 @@ import { frontendTech, backendTech } from '../data/tech'
 import { projects } from '../data/projects'
 import { achievements } from '../data/achievements'
 import { services } from '../data/services'
+import { testimonials } from '../data/testimonials'
 import { useParticles } from '../hooks/useParticles'
 import { usePortfolioNav } from '../hooks/usePortfolioNav'
 import { useHeroEffects } from '../hooks/useHeroEffects'
@@ -279,7 +280,7 @@ export default function PortfolioClient({ initialTheme, initialLang }: { initial
 
       <Logros isDark={isDark} t={t} lang={lang as 'es' | 'en'} achievements={achievements} />
 
-      <Testimonios isDark={isDark} t={t} />
+      <Testimonios isDark={isDark} t={t} lang={lang as 'es' | 'en'} />
 
       <Contacto 
         isDark={isDark}
