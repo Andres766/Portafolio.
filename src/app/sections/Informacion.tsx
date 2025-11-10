@@ -1,7 +1,7 @@
 "use client"
 import Image from 'next/image'
 import { FaLightbulb, FaTools, FaComments, FaClipboardList, FaUserFriends, FaBrain } from 'react-icons/fa'
-import React from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 
 type TechItem = { name: string; icon: React.ReactNode }
 
@@ -20,6 +20,36 @@ export default function Informacion({
   scrollToSection: (id: string) => void
   setServiceModal: React.Dispatch<React.SetStateAction<'frontend' | 'backend' | 'uiux' | 'devops' | null>>
 }) {
+  // Carrusel para la imagen del apartado "Sobre mí"
+  const aboutImages = ['/Andres.jpg', '/apppelicula.jpg', '/reproductor.jpg']
+  const [aboutIdx, setAboutIdx] = useState(0)
+  const [aboutPaused, setAboutPaused] = useState(false)
+  const touchStartX = useRef<number | null>(null)
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartX.current === null) return
+    const delta = e.changedTouches[0].clientX - touchStartX.current
+    const threshold = 40 // px
+    if (delta > threshold) {
+      // swipe derecha -> imagen anterior
+      setAboutIdx((prev) => (prev - 1 + aboutImages.length) % aboutImages.length)
+    } else if (delta < -threshold) {
+      // swipe izquierda -> imagen siguiente
+      setAboutIdx((prev) => (prev + 1) % aboutImages.length)
+    }
+    touchStartX.current = null
+  }
+
+  // Autoplay suave con pausa al hover
+  useEffect(() => {
+    if (aboutPaused) return
+    const id = setInterval(() => {
+      setAboutIdx((prev) => (prev + 1) % aboutImages.length)
+    }, 5000)
+    return () => clearInterval(id)
+  }, [aboutPaused, aboutImages.length])
   return (
     <>
       {/* About Section */}
@@ -68,14 +98,61 @@ export default function Informacion({
           
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1">
-              <div className={`w-full aspect-[4/5] rounded-lg overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-gray-200'}`}>
-                <Image 
-                  src="/Andres.jpg" 
-                  alt="Andres Cordoba" 
-                  width={400} 
-                  height={500} 
-                  className="w-full h-full object-cover"
-                />
+              <div
+                className={`group relative w-full max-w-[300px] md:max-w-[380px] mx-auto aspect-[4/5] md:aspect-[4/5] rounded-lg overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-gray-200'} animate-fade-in-up`}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onMouseEnter={() => setAboutPaused(true)}
+                onMouseLeave={() => setAboutPaused(false)}
+              >
+                {/* Slides */}
+                <div
+                  className="flex w-full h-full transform-gpu will-change-transform transition-transform duration-500 ease-[cubic-bezier(0.22,0.61,0.36,1)]"
+                  style={{ transform: `translateX(-${aboutIdx * 100}%)` }}
+                >
+                  {aboutImages.map((src, i) => (
+                    <div key={src + i} className="w-full h-full shrink-0">
+                      <Image
+                        src={src}
+                        alt={`Sobre mí ${i + 1}`}
+                        width={400}
+                        height={500}
+                        className={`w-full h-full object-cover ${i === aboutIdx ? 'animate-pan-zoom animate-slide-fade-in' : ''}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Controles */}
+                <button
+                  type="button"
+                  aria-label="Anterior"
+                  onClick={() => setAboutIdx((prev) => (prev - 1 + aboutImages.length) % aboutImages.length)}
+                  className={`absolute left-2 top-1/2 -translate-y-1/2 px-2 py-1 rounded-md text-sm ${isDark ? 'bg-slate-900/60 text-white hover:bg-slate-800/80' : 'bg-white/70 text-gray-900 hover:bg-white'} backdrop-blur-sm`}
+                >
+                  ◀
+                </button>
+                <button
+                  type="button"
+                  aria-label="Siguiente"
+                  onClick={() => setAboutIdx((prev) => (prev + 1) % aboutImages.length)}
+                  className={`absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 rounded-md text-sm ${isDark ? 'bg-slate-900/60 text-white hover:bg-slate-800/80' : 'bg-white/70 text-gray-900 hover:bg-white'} backdrop-blur-sm`}
+                >
+                  ▶
+                </button>
+
+                {/* Indicadores */}
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+                  {aboutImages.map((_, i) => (
+                    <button
+                      key={`dot-${i}`}
+                      type="button"
+                      aria-label={`Ir a imagen ${i + 1}`}
+                      onClick={() => setAboutIdx(i)}
+                      className={`${isDark ? 'bg-slate-600' : 'bg-gray-300'} rounded-full transition-colors ${aboutIdx === i ? (isDark ? 'w-3 h-3 bg-sky-400' : 'w-3 h-3 bg-blue-600') : 'w-2 h-2 opacity-70'}`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
             
