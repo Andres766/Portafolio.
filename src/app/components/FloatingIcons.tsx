@@ -1,6 +1,6 @@
 "use client"
 
-import React from 'react'
+import React, { memo } from 'react'
 import { FaReact, FaNodeJs, FaJs, FaAws, FaPython, FaHtml5, FaCss3Alt, FaGitAlt, FaDatabase, FaFire, FaTerminal, FaBootstrap } from 'react-icons/fa'
 import { SiTypescript } from 'react-icons/si'
 
@@ -9,7 +9,7 @@ type Props = {
   iconsRef: React.RefObject<HTMLDivElement | null>
 }
 
-export default function FloatingIcons({ isDark, iconsRef }: Props) {
+function FloatingIcons({ isDark, iconsRef }: Props) {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
       <div className={`animated-bg ${isDark ? 'animated-bg-dark' : 'animated-bg-light'}`}></div>
@@ -85,3 +85,5 @@ export default function FloatingIcons({ isDark, iconsRef }: Props) {
     </div>
   )
 }
+
+export default memo(FloatingIcons)

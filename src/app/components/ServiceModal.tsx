@@ -1,7 +1,30 @@
 "use client"
 
-import React, { useEffect } from 'react'
-import { FaTimes, FaCheckCircle } from 'react-icons/fa'
+import React, { useEffect, useState } from 'react'
+import {
+  FaTimes,
+  FaCheckCircle,
+  FaReact,
+  FaHtml5,
+  FaCss3Alt,
+  FaJs,
+  FaMobileAlt,
+  FaPalette,
+  FaNodeJs,
+  FaPython,
+  FaDatabase,
+  FaLock,
+  FaPuzzlePiece,
+  FaDraftingCompass,
+  FaUniversalAccess,
+  FaSitemap,
+  FaMagic,
+  FaTools,
+  FaChartLine,
+  FaAws,
+  FaServer,
+} from 'react-icons/fa'
+import { SiTailwindcss, SiFigma, SiDocker, SiKubernetes, SiTerraform } from 'react-icons/si'
 
 type ServiceKey = 'frontend' | 'backend' | 'uiux' | 'devops'
 
@@ -42,6 +65,41 @@ export default function ServiceModal({
     }
   }, [serviceModal])
 
+  const [activeSection, setActiveSection] = useState<'includes' | 'process' | 'tech'>('includes')
+
+  const getSkillIcon = (skill: string) => {
+    const s = skill.toLowerCase()
+    // Paleta de colores rápida por modo
+    const base = isDark ? 'text-sky-400' : 'text-blue-600'
+    const neutral = isDark ? 'text-slate-300' : 'text-gray-700'
+
+    if (s.includes('react') || s.includes('next')) return <FaReact className={base} size={18} />
+    if (s.includes('html')) return <FaHtml5 className="text-orange-500" size={18} />
+    if (s.includes('tailwind')) return <SiTailwindcss className="text-cyan-400" size={18} />
+    if (s.includes('css')) return <FaCss3Alt className="text-blue-500" size={18} />
+    if (s.includes('typescript') || s.includes('javascript')) return <FaJs className="text-yellow-400" size={18} />
+    if (s.includes('responsive')) return <FaMobileAlt className={neutral} size={18} />
+    if (s.includes('ui/ux') || s.includes('ux')) return <FaPalette className={neutral} size={18} />
+    if (s.includes('node') || s.includes('express')) return <FaNodeJs className="text-green-500" size={18} />
+    if (s.includes('python')) return <FaPython className="text-blue-500" size={18} />
+    if (s.includes('sql') || s.includes('nosql') || s.includes('base')) return <FaDatabase className={neutral} size={18} />
+    if (s.includes('rest')) return <FaServer className={neutral} size={18} />
+    if (s.includes('aws') || s.includes('cloud')) return <FaAws className="text-orange-400" size={18} />
+    if (s.includes('auth') || s.includes('seguridad')) return <FaLock className={neutral} size={18} />
+    if (s.includes('design systems')) return <FaPuzzlePiece className={neutral} size={18} />
+    if (s.includes('figma')) return <SiFigma className="text-pink-500" size={18} />
+    if (s.includes('prototip')) return <FaDraftingCompass className={neutral} size={18} />
+    if (s.includes('accesibilidad') || s.includes('wcag')) return <FaUniversalAccess className={neutral} size={18} />
+    if (s.includes('arquitectura')) return <FaSitemap className={neutral} size={18} />
+    if (s.includes('micro')) return <FaMagic className={neutral} size={18} />
+    if (s.includes('ci/cd') || s.includes('pipeline')) return <FaTools className={neutral} size={18} />
+    if (s.includes('docker')) return <SiDocker className="text-blue-400" size={18} />
+    if (s.includes('kubernetes')) return <SiKubernetes className="text-blue-500" size={18} />
+    if (s.includes('terraform') || s.includes('iac')) return <SiTerraform className="text-purple-500" size={18} />
+    if (s.includes('monitor')) return <FaChartLine className={neutral} size={18} />
+    return <FaPuzzlePiece className={neutral} size={18} />
+  }
+
   if (!serviceModal) return null
 
   return (
@@ -68,68 +126,86 @@ export default function ServiceModal({
           </div>
         </div>
 
-        <div className="grid md:grid-cols-12 gap-6 md:gap-8">
-          <div className="space-y-6 md:col-span-7">
-            {/* Incluye en chips horizontales */}
-            {services[serviceModal].includes && services[serviceModal].includes!.length > 0 && (
-              <div>
-                <h4 className={`font-bold text-lg mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Incluye</h4>
-                <div className="flex flex-wrap gap-2">
-                  {services[serviceModal].includes!.map((inc) => (
-                    <span key={inc} className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm ${isDark ? 'bg-slate-800 text-slate-300 border border-slate-700' : 'bg-gray-100 text-gray-700 border border-gray-200'} transition-all hover:scale-[1.02]`}>
-                      <FaCheckCircle className={`${isDark ? 'text-sky-400' : 'text-blue-600'}`} />
-                      <span className="leading-tight">{inc}</span>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Tecnologías / Habilidades */}
-            <div>
-              <h4 className={`font-bold text-lg mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Tecnologías</h4>
-              <div className="flex flex-wrap gap-2">
-                {services[serviceModal].skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className={`px-3 py-1 rounded-full text-sm ${isDark ? 'bg-slate-800 text-slate-300 border border-slate-700' : 'bg-gray-100 text-gray-700 border border-gray-200'} transition-all hover:scale-[1.03]`}
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-5 md:col-span-5">
-            {/* Proceso de trabajo como timeline responsivo */}
-            {services[serviceModal].process && services[serviceModal].process!.length > 0 && (
-              <div>
-                <h4 className={`font-bold text-lg mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>Proceso de trabajo</h4>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
-                  {services[serviceModal].process!.map((step, idx) => (
-                    <div key={`${step}-${idx}`} className="flex flex-col items-center text-center">
-                      <span className={`w-8 h-8 flex items-center justify-center rounded-full text-xs font-bold ${isDark ? 'bg-sky-900/40 text-sky-300 border border-sky-700/40' : 'bg-blue-50 text-blue-700 border border-blue-200'}`}>{idx + 1}</span>
-                      <span className={`mt-2 text-sm leading-tight ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{step}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Barra de progreso eliminada por no utilizarse */}
-              </div>
-            )}
-
-            {/* CTA */}
-            <div className="pt-2 flex justify-start md:justify-center">
-              <a
-                href="#contact"
-                onClick={() => setServiceModal(null)}
-                className={`px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 cursor-pointer ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+        {/* Controles de secciones para reducir la densidad visual */}
+        <div className="flex justify-center mb-4">
+          <div className={`inline-flex rounded-full p-1 ${isDark ? 'bg-slate-800/60 border border-slate-700' : 'bg-gray-100 border border-gray-200'}`}>
+            {[
+              { key: 'includes', label: 'Incluye' },
+              { key: 'process', label: 'Proceso' },
+              { key: 'tech', label: 'Tecnologías' },
+            ].map(({ key, label }) => (
+              <button
+                key={key}
+                onClick={() => setActiveSection(key as any)}
+                className={`px-4 py-1.5 rounded-full text-sm transition-all ${activeSection === key ? (isDark ? 'bg-sky-500 text-slate-950' : 'bg-blue-600 text-white') : (isDark ? 'text-slate-300' : 'text-gray-700')}`}
               >
-                Contáctame
-              </a>
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {activeSection === 'includes' && services[serviceModal].includes && services[serviceModal].includes!.length > 0 && (
+          <div className="space-y-2">
+            <h4 className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>Incluye</h4>
+            <ul className="space-y-2">
+              {services[serviceModal].includes!.map((inc) => (
+                <li key={inc} className={`flex items-start gap-2 p-2 rounded-lg ${isDark ? 'bg-slate-800/50' : 'bg-gray-100'}`}>
+                  <FaCheckCircle className={`${isDark ? 'text-sky-400' : 'text-blue-600'} mt-0.5`} />
+                  <span className={`text-sm leading-tight ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{inc}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {activeSection === 'process' && services[serviceModal].process && services[serviceModal].process!.length > 0 && (
+          <div className="space-y-2">
+            <h4 className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>Proceso de trabajo</h4>
+            <ol className="space-y-3">
+              {services[serviceModal].process!.map((step, idx) => (
+                <li key={`${step}-${idx}`} className="flex items-start gap-3">
+                  <span className={`w-7 h-7 flex items-center justify-center rounded-full text-xs font-bold ${isDark ? 'bg-sky-900/40 text-sky-300 border border-sky-700/40' : 'bg-blue-50 text-blue-700 border border-blue-200'}`}>{idx + 1}</span>
+                  <span className={`text-sm leading-tight ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        {activeSection === 'tech' && (
+          <div className="space-y-2">
+            <h4 className={`font-bold text-lg ${isDark ? 'text-white' : 'text-gray-900'}`}>Tecnologías</h4>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {services[serviceModal].skills.map((skill) => (
+                <div
+                  key={skill}
+                  className={`group flex items-center gap-2 px-3 py-2 rounded-lg text-sm ${
+                    isDark
+                      ? 'bg-slate-800/60 text-slate-300 border border-slate-700/50 hover:bg-slate-700/60 hover:ring-1 hover:ring-sky-500'
+                      : 'bg-gray-100 text-gray-700 border border-gray-200 hover:bg-gray-200 hover:ring-1 hover:ring-blue-400'
+                  } transition-all hover:scale-[1.04] hover:-translate-y-0.5`}
+                  aria-label={skill}
+                >
+                  <span className="shrink-0 transition-transform group-hover:rotate-6 group-hover:scale-110">
+                    {getSkillIcon(skill)}
+                  </span>
+                  <span className="truncate">{skill}</span>
+                </div>
+              ))}
             </div>
           </div>
+        )}
+
+        {/* CTA */}
+        <div className="pt-6 flex justify-center">
+          <a
+            href="#contact"
+            onClick={() => setServiceModal(null)}
+            className={`px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105 cursor-pointer ${isDark ? 'bg-sky-400 text-slate-950 hover:bg-sky-500' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+          >
+            Contáctame
+          </a>
         </div>
       </div>
     </div>

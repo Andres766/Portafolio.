@@ -6,7 +6,8 @@ export default async function Page() {
   const themeCookie = cookieStore.get('theme')
   const langCookie = cookieStore.get('lang')
   
-  const initialTheme = (themeCookie?.value === 'light') ? 'light' : 'dark'
+  const themeValue = themeCookie?.value || 'system'
+  const initialTheme = themeValue === 'light' ? 'light' : themeValue === 'dark' ? 'dark' : 'system'
   const initialLang = (langCookie?.value === 'en') ? 'en' : 'es'
 
   return <PortfolioClient initialTheme={initialTheme} initialLang={initialLang} />

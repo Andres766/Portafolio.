@@ -3,14 +3,15 @@
 import { useState, useEffect, useRef } from 'react'
 import emailjs from '@emailjs/browser'
 import { FaLinkedin, FaGithub, FaLightbulb, FaTools, FaComments, FaClipboardList, FaUserFriends, FaBrain, FaWhatsapp, FaTimes, FaEnvelope } from 'react-icons/fa'
-import Inicio from '../sections/Inicio'
-import Informacion from '../sections/Informacion'
-import Proyectos from '../sections/Proyectos'
-import Contacto from '../sections/Contacto'
-import Logros from '../sections/Logros'
-import Testimonios from '../sections/Testimonios'
-import ServiceModal from './ServiceModal'
-import ProjectModal from './ProjectModal'
+import dynamic from 'next/dynamic'
+const Inicio = dynamic(() => import('../sections/Inicio'), { ssr: false })
+const Informacion = dynamic(() => import('../sections/Informacion'), { ssr: false })
+const Proyectos = dynamic(() => import('../sections/Proyectos'), { ssr: false })
+const Contacto = dynamic(() => import('../sections/Contacto'), { ssr: false })
+const Logros = dynamic(() => import('../sections/Logros'), { ssr: false })
+const Testimonios = dynamic(() => import('../sections/Testimonios'), { ssr: false })
+const ServiceModal = dynamic(() => import('./ServiceModal'), { ssr: false })
+const ProjectModal = dynamic(() => import('./ProjectModal'), { ssr: false })
 import { frontendTech, backendTech } from '../data/tech'
 import { projects } from '../data/projects'
 import { achievements } from '../data/achievements'
@@ -31,12 +32,13 @@ type CSSVars = React.CSSProperties & {
   ['--spd']?: string
 }
 
-export default function PortfolioClient({ initialTheme, initialLang }: { initialTheme: 'dark' | 'light'; initialLang: 'es' | 'en' }) {
-  // Initialize from SSR-provided props to guarantee SSR/CSR match
+export default function PortfolioClient({ initialTheme, initialLang }: { initialTheme: 'dark' | 'light' | 'system'; initialLang: 'es' | 'en' }) {
+  // Theme mode (light, dark, system)
+  const [themeMode, setThemeMode] = useState<'light' | 'dark' | 'system'>(initialTheme)
   const [isDark, setIsDark] = useState<boolean>(initialTheme === 'dark')
 
   // Keep loader consistent with initial theme to avoid flash
-  const [loaderTheme, setLoaderTheme] = useState<'dark' | 'light'>(initialTheme)
+  const [loaderTheme, setLoaderTheme] = useState<'dark' | 'light'>(initialTheme === 'dark' ? 'dark' : 'light')
 
   const [serviceModal, setServiceModal] = useState<'frontend' | 'backend' | 'uiux' | 'devops' | null>(null)
   const [projectModal, setProjectModal] = useState<number | null>(null)
@@ -59,6 +61,10 @@ export default function PortfolioClient({ initialTheme, initialLang }: { initial
   // Typewriter effect for hero section
   const [displayedText, setDisplayedText] = useState('')
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [funnyText, setFunnyText] = useState('')
+  const [funnyIndex, setFunnyIndex] = useState(0)
+  const [funnyPhraseIndex, setFunnyPhraseIndex] = useState(0)
+  const [funnyDeleting, setFunnyDeleting] = useState(false)
   // showCursor ahora proviene del hook useHeroEffects
   // scrolled ahora proviene del hook usePortfolioNav
 
@@ -154,28 +160,93 @@ export default function PortfolioClient({ initialTheme, initialLang }: { initial
     setCurrentIndex(0)
   }, [lang])
 
-  const handleToggleTheme = () => {
+  useEffect(() => {
+    const phrases = lang === 'es' ? jokesEs : jokesEn
+    const current = phrases[funnyPhraseIndex] || ''
+    let timeout: any
+    if (!funnyDeleting) {
+      if (funnyIndex < current.length) {
+        timeout = setTimeout(() => {
+          setFunnyText(prev => prev + current[funnyIndex])
+          setFunnyIndex(prev => prev + 1)
+        }, 80)
+      } else {
+        timeout = setTimeout(() => {
+          setFunnyDeleting(true)
+        }, 1200)
+      }
+    } else {
+      if (funnyIndex > 0) {
+        timeout = setTimeout(() => {
+          setFunnyText(prev => prev.slice(0, -1))
+          setFunnyIndex(prev => prev - 1)
+        }, 40)
+      } else {
+        timeout = setTimeout(() => {
+          setFunnyDeleting(false)
+          setFunnyPhraseIndex(prev => (prev + 1) % phrases.length)
+        }, 400)
+      }
+    }
+    return () => clearTimeout(timeout)
+  }, [funnyIndex, funnyDeleting, funnyPhraseIndex, lang])
+
+  useEffect(() => {
+    setFunnyText('')
+    setFunnyIndex(0)
+    setFunnyDeleting(false)
+    setFunnyPhraseIndex(0)
+  }, [lang])
+
+
+
+  const applyTheme = (mode: 'light' | 'dark' | 'system') => {
+    setThemeMode(mode)
     if (typeof document !== 'undefined') {
       document.documentElement.classList.add('theme-switching')
     }
-    setIsDark((prev: boolean) => {
-      const next = !prev
-      try {
-        window.localStorage.setItem('theme', next ? 'dark' : 'light')
-        document.cookie = `theme=${next ? 'dark' : 'light'}; path=/; max-age=31536000`
-        const html = document.documentElement
-        html.classList.remove('light','dark')
-        html.classList.add(next ? 'dark' : 'light')
-      } catch {}
-      setLoaderTheme(next ? 'dark' : 'light')
-      return next
-    })
+    const prefersDark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    const dark = mode === 'system' ? prefersDark : mode === 'dark'
+    try {
+      window.localStorage.setItem('theme', mode)
+      document.cookie = `theme=${mode}; path=/; max-age=31536000`
+      const html = document.documentElement
+      html.classList.remove('light','dark')
+      html.classList.add(dark ? 'dark' : 'light')
+    } catch {}
+    setIsDark(dark)
+    setLoaderTheme(dark ? 'dark' : 'light')
     setTimeout(() => {
       if (typeof document !== 'undefined') {
         document.documentElement.classList.remove('theme-switching')
       }
-    }, 200)
+    }, 1000)
   }
+
+  // Initialize theme from initial mode and system preference
+  useEffect(() => {
+    const prefersDark = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    const dark = themeMode === 'system' ? prefersDark : themeMode === 'dark'
+    setIsDark(dark)
+    setLoaderTheme(dark ? 'dark' : 'light')
+    const html = document.documentElement
+    html.classList.remove('light','dark')
+    html.classList.add(dark ? 'dark' : 'light')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // React to OS theme changes when in 'system' mode
+  useEffect(() => {
+    if (themeMode !== 'system') return
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = () => applyTheme('system')
+    if (mq.addEventListener) mq.addEventListener('change', handler)
+    else mq.addListener(handler)
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener('change', handler)
+      else mq.removeListener(handler)
+    }
+  }, [themeMode])
 
   // Loading animation
   useEffect(() => {
@@ -216,33 +287,36 @@ export default function PortfolioClient({ initialTheme, initialLang }: { initial
     <div className={`min-h-screen relative ${isDark ? 'text-white' : 'text-gray-900'}`}>
       <FloatingIcons isDark={isDark} iconsRef={iconsRef} />
 
-      <div className="fixed left-4 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4">
-        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={`transform transition-all duration-300 hover:scale-110 ${isDark ? 'text-sky-400 hover:text-sky-300' : 'text-blue-600 hover:text-blue-700'}`}>
-          <FaLinkedin size={24} />
-        </a>
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={`transform transition-all duration-300 hover:scale-110 ${isDark ? 'text-sky-400 hover:text-sky-300' : 'text-blue-600 hover:text-blue-700'}`}>
-          <FaGithub size={24} />
-        </a>
-      </div>
+      
 
       <LanguageToggle isDark={isDark} lang={lang as 'es'|'en'} ariaLabel={t('changeLanguage')} onToggle={() => setLang(lang === 'es' ? 'en' : 'es')} />
 
-      <button 
-        onClick={handleToggleTheme}
-        className={`fixed top-8 right-8 z-50 p-2 rounded-lg transition-all duration-150 ease-out transform hover:scale-110 cursor-pointer ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-200'}`}
-      >
-        {isDark ? (
-          // Moon icon
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-          </svg>
-        ) : (
-          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-            <circle cx="12" cy="12" r="4" strokeWidth="2" />
-            <path strokeWidth="2" strokeLinecap="round" d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41" />
-          </svg>
-        )}
-      </button>
+      {/* Theme segmented control */}
+      <div className="fixed top-8 right-8 z-50">
+        <div className={`inline-flex rounded-full p-1 ${isDark ? 'bg-slate-800/60 border border-slate-700' : 'bg-gray-100 border border-gray-200'}`}>
+          <button
+            onClick={() => applyTheme('light')}
+            className={`px-3 py-1.5 rounded-full text-sm cursor-pointer ${themeMode === 'light' ? (isDark ? 'bg-sky-500 text-slate-950' : 'bg-blue-600 text-white') : (isDark ? 'text-slate-300' : 'text-gray-700')}`}
+            aria-label="Modo claro"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4" strokeWidth="2" /><path strokeWidth="2" strokeLinecap="round" d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41" /></svg>
+          </button>
+          <button
+            onClick={() => applyTheme('dark')}
+            className={`px-3 py-1.5 rounded-full text-sm cursor-pointer ${themeMode === 'dark' ? (isDark ? 'bg-sky-500 text-slate-950' : 'bg-blue-600 text-white') : (isDark ? 'text-slate-300' : 'text-gray-700')}`}
+            aria-label="Modo oscuro"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M21.64 13A9 9 0 1111 2.36a7 7 0 1010.64 10.64z" /></svg>
+          </button>
+          <button
+            onClick={() => applyTheme('system')}
+            className={`px-3 py-1.5 rounded-full text-sm cursor-pointer ${themeMode === 'system' ? (isDark ? 'bg-sky-500 text-slate-950' : 'bg-blue-600 text-white') : (isDark ? 'text-slate-300' : 'text-gray-700')}`}
+            aria-label="Modo del sistema"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5zm4 12h10v2H7v-2z"/></svg>
+          </button>
+        </div>
+      </div>
 
       <Inicio 
         isDark={isDark} 
@@ -251,6 +325,7 @@ export default function PortfolioClient({ initialTheme, initialLang }: { initial
         handleHeroMouseLeave={handleHeroMouseLeave} 
         displayedText={displayedText} 
         showCursor={showCursor} 
+        funnyText={funnyText}
         particles={particles} 
         photoRef={photoRef} 
         photoTilt={photoTilt} 
@@ -267,31 +342,41 @@ export default function PortfolioClient({ initialTheme, initialLang }: { initial
         activeSection={activeSection} 
       />
 
-      <Informacion 
-        isDark={isDark} 
-        t={t} 
-        frontendTech={frontendTech} 
-        backendTech={backendTech} 
-        scrollToSection={scrollToSection} 
-        setServiceModal={setServiceModal} 
-      />
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: '900px' }}>
+        <Informacion 
+          isDark={isDark} 
+          t={t} 
+          frontendTech={frontendTech} 
+          backendTech={backendTech} 
+          scrollToSection={scrollToSection} 
+          setServiceModal={setServiceModal} 
+        />
+      </div>
 
-      <Proyectos isDark={isDark} t={t} lang={lang as 'es' | 'en'} projects={projects} setProjectModal={setProjectModal} />
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: '900px' }}>
+        <Proyectos isDark={isDark} t={t} lang={lang as 'es' | 'en'} projects={projects} setProjectModal={setProjectModal} />
+      </div>
 
-      <Logros isDark={isDark} t={t} lang={lang as 'es' | 'en'} achievements={achievements} />
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: '800px' }}>
+        <Logros isDark={isDark} t={t} lang={lang as 'es' | 'en'} achievements={achievements} />
+      </div>
 
-      <Testimonios isDark={isDark} t={t} lang={lang as 'es' | 'en'} />
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: '700px' }}>
+        <Testimonios isDark={isDark} t={t} lang={lang as 'es' | 'en'} />
+      </div>
 
-      <Contacto 
-        isDark={isDark}
-        t={t}
-        lang={lang as 'es' | 'en'}
-        form={form}
-        setForm={setForm}
-        sending={sending}
-        feedback={feedback}
-        onSubmit={handleSubmitContact}
-      />
+      <div style={{ contentVisibility: 'auto', containIntrinsicSize: '800px' }}>
+        <Contacto 
+          isDark={isDark}
+          t={t}
+          lang={lang as 'es' | 'en'}
+          form={form}
+          setForm={setForm}
+          sending={sending}
+          feedback={feedback}
+          onSubmit={handleSubmitContact}
+        />
+      </div>
 
       <footer ref={footerRef} className={`py-8 border-t relative z-10 ${isDark ? 'border-slate-800 bg-slate-950/50' : 'border-gray-200 bg-white/50'} backdrop-blur-sm`}>
         <div className="max-w-6xl mx-auto px-4 text-center">
@@ -308,3 +393,25 @@ export default function PortfolioClient({ initialTheme, initialLang }: { initial
     </div>
   )
 }
+  const jokesEs = [
+    'Ayer compilaba, hoy depuro',
+    'Funciona en mi máquina',
+    'Es una feature, no un bug',
+    'Ctrl+Z es vida',
+    'Commit temprano, deploy tranquilo',
+    'Los puntos y coma son opcionales',
+    'Testeo luego existo',
+    'Café == código',
+    'Standup: sí, en ello',
+  ]
+  const jokesEn = [
+    'Yesterday I compiled, today I debug',
+    'Works on my machine',
+    "It’s a feature, not a bug",
+    'Ctrl+Z is life',
+    'Early commit, calm deploy',
+    'Semicolons are optional',
+    'I test therefore I am',
+    'Coffee == code',
+    'Standup: yes, working on it',
+  ]

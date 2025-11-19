@@ -13,6 +13,7 @@ type Props = {
   handleHeroMouseLeave: () => void
   displayedText: string
   showCursor: boolean
+  funnyText: string
   particles: Array<{ id: number; x: number; y: number; size: number; opacity: number; speed: number }>
   photoRef: React.RefObject<HTMLDivElement | null>
   photoTilt: { rx: number; ry: number; scale: number }
@@ -36,6 +37,7 @@ export default function Inicio({
   handleHeroMouseLeave,
   displayedText,
   showCursor,
+  funnyText,
   particles,
   photoRef,
   photoTilt,
@@ -92,6 +94,14 @@ export default function Inicio({
               )
             ))}
           </h1>
+          <div className="flex items-center justify-center">
+            <div className={`inline-flex items-center px-4 py-1 rounded-full backdrop-blur-sm ${isDark ? 'bg-slate-800/20 border border-slate-700 text-slate-200' : 'bg-white/30 border border-gray-200 text-gray-800'}`}>
+              <span className="font-sans text-[1.15rem] md:text-[1.35rem] font-semibold tracking-wide">
+                {funnyText}
+                <span className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}>|</span>
+              </span>
+            </div>
+          </div>
           <div className={`text-xl md:text-2xl h-8 flex items-center justify-center ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>
             <span className="font-mono">
               {displayedText}

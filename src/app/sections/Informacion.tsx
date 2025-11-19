@@ -21,7 +21,7 @@ export default function Informacion({
   setServiceModal: React.Dispatch<React.SetStateAction<'frontend' | 'backend' | 'uiux' | 'devops' | null>>
 }) {
   // Carrusel para la imagen del apartado "Sobre mí"
-  const aboutImages = ['/Andres.jpg', '/apppelicula.jpg', '/reproductor.jpg']
+const aboutImages = ['/Andres2.jpg', '/Andres.jpg', '/Andres3.jpg']
   const [aboutIdx, setAboutIdx] = useState(0)
   const [aboutPaused, setAboutPaused] = useState(false)
   const touchStartX = useRef<number | null>(null)
