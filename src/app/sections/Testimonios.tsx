@@ -1,6 +1,7 @@
 "use client"
 
 import React from 'react'
+import Image from 'next/image'
 import { FaStar, FaExternalLinkAlt } from 'react-icons/fa'
 import { testimonials } from '../data/testimonials'
 
@@ -18,8 +19,12 @@ export default function Testimonios({
       className={`relative backdrop-blur-sm rounded-xl p-6 ${isDark ? 'bg-slate-800/30 border border-slate-700/40' : 'bg-white border border-gray-200/50'}`}
     >
       <div className="flex items-center gap-4 mb-3">
-        <div className={`w-11 h-11 rounded-full flex items-center justify-center text-xl ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>
-          {item.avatar || '👤'}
+        <div className="w-11 h-11 rounded-full overflow-hidden">
+          {item.avatar && item.avatar.startsWith('/') ? (
+            <Image src={item.avatar} alt={item.name} width={44} height={44} className="w-11 h-11 object-cover" />
+          ) : (
+            <div className={`w-11 h-11 rounded-full flex items-center justify-center text-xl ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}>{item.avatar || '👤'}</div>
+          )}
         </div>
         <div>
           <h4 className={`font-semibold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.name}</h4>
